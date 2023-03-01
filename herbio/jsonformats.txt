@@ -1,0 +1,47 @@
+{
+  "intervals": [
+    {
+      "type": "daily",
+      "hour": 12,
+      "minute": 0,
+      "second": 0
+    },
+    {
+      "type": "weekly",
+      "day": 1,
+      "hour": 12,
+      "minute": 0,
+      "second": 0
+    },
+    {
+      "type": "monthly",
+      "day": 15,
+      "hour": 12,
+      "minute": 0,
+      "second": 0
+    }
+  ]
+}
+
+void parseConfig(const char* config) {
+  StaticJsonDocument<256> doc; // Create a buffer to hold the JSON data
+  deserializeJson(doc, config); // Parse the JSON data
+
+  JsonArray intervals = doc["intervals"]; // Extract the intervals array
+
+  // Loop through each interval object in the array
+  for (JsonObject interval : intervals) {
+    String type = interval["type"]; // Extract the interval type
+
+    // Extract the interval details based on the type
+      if(type != "daily")
+      int day = interval["day"];
+      int hour = interval["hour"];
+      int minute = interval["minute"];
+      int second = interval["second"];
+	... nejaké settings
+  }
+}
+
+
+
