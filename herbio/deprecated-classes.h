@@ -1,6 +1,16 @@
-#pragma once
 
-#include <ArduinoJson.h>
+
+// THIS FILE IS DEPRECATED (refactored into separate files "classes/*(.h)|(.cpp)"   
+// this was a trash file to be honest, but fullfiled fast impl. purpose
+#if 0
+
+#pragma once
+#include <Arduino.h>
+#include "LinkedList.h"
+#include <ArduinoJson.h> 
+
+
+
 
 class Measurable{public:  virtual float     measure() = 0; };
 class Entity  {
@@ -46,7 +56,8 @@ public:
   }
   Measurable* getMeasurable(){return this;}
 };
-class MoistureSensor    : public Entity, public Measurable{private:
+class MoistureSensor    : public Entity, public Measurable{
+private:
   byte pin;
 public:
   int value;
@@ -259,3 +270,176 @@ public:
     return true;
   }
 };
+
+class Timer : Entity {
+public:
+  unsigned int start;
+  unsigned int target;
+  Timer() {
+    start = 0;
+    target = 0;
+    name = "untitled";
+  }
+  Timer(byte id, String name, uint start, uint target){
+    this->id = id;
+    this->name=name;
+    this->start=start;
+    this->target=target;
+  }
+  Timer* setTimes(uint start, uint target){
+    this->start=start;
+    this->target=target;
+    return this;
+  }
+  Timer* setName(String name){
+    this->name=name;
+    return this;
+  }
+
+  void next(){
+    start = target;   
+    target += target - start; // push `next` to future
+  }
+
+  boolean passed(unsigned int time){
+    return target < time;
+  }
+  
+  boolean passed(unsigned int time, bool toNext){
+    if(target < time){
+      next();
+      return true;
+    }
+    return false;
+  }
+
+  JsonObject toJson(JsonDocument &doc){
+    JsonObject json = doc.createNestedObject();
+    json["id"] = this->id;
+    json["name"] = this->name;
+    json["start"] = this->start;
+    json["target"] = this->target;
+
+    return json;
+  }
+
+  boolean update(JsonObject &obj){
+    if(obj["id"] != this->id)
+      return false;
+    this->name   = obj["name"].as<String>() ; 
+    this->start  = obj["start"];
+    this->target = obj["target"];
+    return true;
+  }
+
+};
+class Section : public Entity{
+public:
+  enum MODE{MANUAL,AUTO,DEAD};
+  int unit;
+  MODE mode;
+  unsigned char min_humid;
+  uint water_time;
+
+  Timer* timer;
+  Valve* valve;
+  MoistureSensor *moisture;
+  Section(){}
+  Section(byte id,String name, byte min_humid, uint water_time,Valve *valve){
+    this->id   = id;
+    this->name = name;
+    this->min_humid  = min_humid;
+    this->water_time = water_time;
+    this->valve = valve;
+  }
+
+  Section* setValve(Valve *valve){
+    this->valve = valve;
+    return this;
+  }
+  Section* setTimer(Timer *timer){
+    this->timer = timer;
+    return this;
+  }
+  Section* setMinHumid(byte min_humid){
+    this->min_humid = min_humid;
+    return this;
+  }
+  Section* setWaterTime(uint water_time){
+    this->water_time = water_time;
+    return this;
+  }
+  Section* setMoistureSensor(MoistureSensor *sensor){
+    this->moisture = sensor;
+    return this;
+  }
+  JsonObject toJson(JsonDocument &doc){
+    JsonObject json = doc.createNestedObject();
+    json["id"]          = this->id;
+    json["name"]        = this->name;
+    json["timer"]       = this->timer->toJson(doc); //???
+    json["water_time"]  = this->water_time;
+    json["min_humidity"]= this->min_humid;
+    json["valve"]       = this->valve->toJson(doc); //???
+    json["moisture"]   = this->moisture->toJson(doc);
+    return json;
+  }
+  /**
+   * Updates only plain values (not nested entities)
+   * such as: name,water_time,min_humid
+  */
+  
+  boolean update(JsonObject &obj){
+    if(obj["id"] != this->id)
+      return false;
+    this->name      = obj["name"].as<String>() ; 
+    this->water_time= obj["water_time"].as<int>();
+    this->min_humid = obj["min_humidity"].as<int>();
+    this->moisture = getEntity(obj["moisture"].as<int>());
+    return true;
+  }
+
+};
+
+
+Entity* getEntity(byte id);
+//usual constructors: (id, pin, name,  ..sensorParams)
+MoistureSensor moist0(1,A0,"moist_A0",30,50);
+MoistureSensor moist1(2,A1,"moist_A1",30,50);
+MoistureSensor moist2(3,A2,"moist_A2",30,50);
+MoistureSensor moist3(4,A3,"moist_A3",30,50);
+
+Tank tank(5,"g_tank",3,2);
+Pump pump(6,4,"g_pump",60);
+UVsensor uv(7,A4,"uv_sensor");
+TemperatureSensor themp(8,7,"thermometer");
+
+Valve valve0(9,6,  "valve0");        
+Valve valve1(10,8, "valve1");        
+Valve valve2(11,9, "valve2");        
+Valve valve3(12,10,"valve3");        
+Section section0(20,"section0",20,90,&valve0,&moist0);
+Section section1(20,"section0",20,90,&valve1,&moist1);
+Section section2(20,"section0",20,90,&valve2,&moist2);
+Section section3(20,"section0",20,90,&valve3,&moist3);
+
+byte buttonPin = 12;
+Entity *entities[]{ 
+  &moist0, &moist1, &moist2, &moist3, 
+  &valve0, &valve1, &valve2, &valve3,
+  &tank, &pump, &uv, &themp,
+  &section0,
+  &section1,
+  &section2,
+  &section3
+};
+
+#define NELEM(x) (sizeof(x)/sizeof(*x))
+
+Entity* getEntity(byte id){
+  for(byte i=0; i < NELEM(entities)-1; i++){
+    if(entities[i]->id == id)
+      return entities[i];
+  }
+}
+#endif
