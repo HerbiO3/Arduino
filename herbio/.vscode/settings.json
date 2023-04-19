@@ -1,0 +1,15 @@
+{
+    "files.associations": {
+        "*.h++": "cpp",
+        "string": "cpp",
+        "system_error": "cpp",
+        "array": "cpp",
+        "functional": "cpp",
+        "tuple": "cpp",
+        "type_traits": "cpp",
+        "utility": "cpp",
+        "iterator": "cpp",
+        "iterator_base": "cpp",
+        "*.tcc": "cpp"
+    }
+}

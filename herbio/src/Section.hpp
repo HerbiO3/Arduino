@@ -1,10 +1,10 @@
 #ifndef SECTION_H
 #define SECTION_H
 
-#include "Entity.h"
-#include "Timer.h"
-#include "Valve.h"
-#include "MoistSensor.h"
+#include "Entity.hpp"
+#include "Valve.hpp"
+#include "MoistSensor.hpp"
+typedef uint32_t time_t;
 
 enum MODE{MANUAL,AUTO,DEAD};
 
@@ -13,20 +13,19 @@ public:
   int unit;
   MODE mode;
   unsigned char min_humid;
-  uint water_time;
+  time_t water_time;
 
-  uint timer_start;
-  uint timer_end;
+  time_t timer_start;
+  time_t timer_end;
 
   Valve* valve;
   MoistureSensor *moisture;
   Section();
-  Section(byte id,String name, byte min_humid, uint water_time,Valve *valve);
-
+  Section(byte id,String name, byte min_humid, time_t water_time, Valve *valve);
   Section* setValve(Valve *valve);
-  Section* setTimer(uint time_start, uint time_end);
+  Section* setTimer(time_t time_start, time_t time_end);
   Section* setMinHumid(byte min_humid);
-  Section* setWaterTime(uint water_time);
+  Section* setWaterTime(time_t water_time);
   Section* setMoistureSensor(MoistureSensor *sensor);
 
   JsonObject toJson(JsonDocument &doc);

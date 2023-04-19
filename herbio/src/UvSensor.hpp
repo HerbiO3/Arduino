@@ -2,8 +2,8 @@
 #define UvSensor_h
 
 #include <ArduinoJson.h>
-#include "Entity.h"
-#include "Measurable.h"
+#include "Entity.hpp"
+#include "Measurable.hpp"
 
 class UVsensor : public Entity, public Measurable {
   private:

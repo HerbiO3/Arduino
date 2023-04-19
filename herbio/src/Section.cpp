@@ -1,10 +1,10 @@
-#include "Section.h"
+#include "Section.hpp"
+
+
 
 Section::Section() {}
 
-Section::Section(byte id,String name, byte min_humid, uint water_time,Valve *valve) {
-  this->id   = id;
-  this->name = name;
+Section::Section(byte id,String name, byte min_humid, time_t water_time, Valve *valve) : Entity(id,name){
   this->min_humid  = min_humid;
   this->water_time = water_time;
   this->valve = valve;
@@ -15,7 +15,7 @@ Section* Section::setValve(Valve *valve) {
   return this;
 }
 
-Section* Section::setTimer(uint time_start, uint time_end) {
+Section* Section::setTimer(time_t time_start, time_t time_end) {
   this->timer_start = time_start;
   this->timer_end = time_end;
   return this;
@@ -26,7 +26,7 @@ Section* Section::setMinHumid(byte min_humid) {
   return this;
 }
 
-Section* Section::setWaterTime(uint water_time) {
+Section* Section::setWaterTime(time_t water_time) {
   this->water_time = water_time;
   return this;
 }
@@ -38,7 +38,6 @@ Section* Section::setMoistureSensor(MoistureSensor *sensor) {
 
 JsonObject Section::toJson(JsonDocument &doc) {
   JsonObject json = Entity::toJson(doc);
-  json["timer"]       = this->timer->toJson(doc);
   json["water_time"]  = this->water_time;
   json["min_humidity"]= this->min_humid;
   json["valve"]       = this->valve->toJson(doc);
@@ -52,6 +51,6 @@ boolean Section::update(JsonObject &obj) {
   this->name      = obj["name"].as<String>() ;
   this->water_time= obj["water_time"].as<int>();
   this->min_humid = obj["min_humidity"].as<int>();
-  this->moisture = getEntity(obj["moisture"].as<int>());
+  //this->moisture = getEntity(obj["moisture"].as<int>());
   return true;
 }

@@ -1,7 +1,7 @@
 #ifndef VALVE_H
 #define VALVE_H
 
-#include "Entity.h"
+#include "Entity.hpp"
 
 class Valve : public Entity {
 private:
@@ -12,6 +12,8 @@ public:
   Valve(byte id, byte pin, String name);
 
   bool isOpen();
+  bool open();
+  bool close();
 
   JsonObject toJson(JsonDocument &doc);
 

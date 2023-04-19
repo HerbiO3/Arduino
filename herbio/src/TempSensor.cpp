@@ -1,11 +1,9 @@
-#include "TempSensor.h"
+#include "TempSensor.hpp"
 
+//SINGLETON
 TemperatureSensor::TemperatureSensor() {}
 
-TemperatureSensor::TemperatureSensor(byte id, byte pin, String name) {
-  this->id = id;
-  this->name = name;
-  this->pin = pin;
+TemperatureSensor::TemperatureSensor(byte id, byte pin, String name) : Entity(id,name) {
   this->oneWire = OneWire(pin);
   this->tempSensors = DallasTemperature(&oneWire);
   this->tempSensors.begin();

@@ -3,10 +3,10 @@
 
 #include <OneWire.h>
 #include <DallasTemperature.h>
-#include <Entity.h>
-#include <Measurable.h>
+#include "Entity.hpp"
+#include "Measurable.hpp"
 #include <ArduinoJson.h>
-
+//SINGLETON (due to initalizing DallasTem. in constructor)
 class TemperatureSensor : public Entity, public Measurable {
   public:
     TemperatureSensor();
@@ -17,8 +17,6 @@ class TemperatureSensor : public Entity, public Measurable {
     Measurable* getMeasurable();
 
   private:
-    byte pin;
-    String name;
     OneWire oneWire;
     DallasTemperature tempSensors;
 };

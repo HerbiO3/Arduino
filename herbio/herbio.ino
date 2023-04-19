@@ -11,53 +11,53 @@
 
 
 //======Custom objects=============//
-#include "classes/Entity.h"        //
-#include "classes/Measurable.h"    //
-#include "classes/MoistSensor.h"   //
-#include "classes/Pump.h"          //
-#include "classes/Section.h"       //
-#include "classes/Tank.h"          //
-#include "classes/TempSensor.h"    //
-#include "classes/Utils.h"         //
-#include "classes/UvSensor.h"      //
-#include "classes/Valve.h"         //
+#include "src/Entity.hpp"      //
+#include "src/Measurable.hpp"  //
+#include "src/MoistSensor.hpp" //
+#include "src/Pump.hpp"        //
+#include "src/Section.hpp"     //
+#include "src/Tank.hpp"        //
+#include "src/TempSensor.hpp"  //
+#include "src/Utils.hpp"       //
+#include "src/UvSensor.hpp"    //
+#include "src/Valve.hpp"       //
 //=================================//
 
 #define NAME_LEN_MAX 20
 
 RTC_DS1307 rtc;
 
-//======== Entities for the system ====================//
-MoistureSensor moist0(1,A0,"moist_A0",30,50);          //
-MoistureSensor moist1(2,A1,"moist_A1",30,50);          //
-MoistureSensor moist2(3,A2,"moist_A2",30,50);          //
-MoistureSensor moist3(4,A3,"moist_A3",30,50);          //
-                                                       //
-Tank tank(5,"g_tank",3,2);                             //
-Pump pump(6,4,"g_pump",60);                            //
-UVsensor uv(7,A4,"uv_sensor");                         //
-TemperatureSensor themp(8,7,"thermometer");            //
-                                                       //
-Valve valve0(9,6,  "valve0");                          //
-Valve valve1(10,8, "valve1");                          //
-Valve valve2(11,9, "valve2");                          //
-Valve valve3(12,10,"valve3");                          //
-Section section0(20,"section0",20,90,&valve0,&moist0); //
-Section section1(20,"section0",20,90,&valve1,&moist1); //
-Section section2(20,"section0",20,90,&valve2,&moist2); //
-Section section3(20,"section0",20,90,&valve3,&moist3); //
-                                                       //
-byte buttonPin = 12;                                   //
-Entity *entities[]{                                    //
-  &moist0, &moist1, &moist2, &moist3,                  //
-  &valve0, &valve1, &valve2, &valve3,                  //
-  &tank, &pump, &uv, &themp,                           //
-  &section0,                                           //
-  &section1,                                           //
-  &section2,                                           //
-  &section3                                            //
-};                                                     //
-//=====================================================//
+//======== Entities for the system ===========================//
+MoistureSensor moist0(1,A0,"moist_A0");                       //
+MoistureSensor moist1(2,A1,"moist_A1");                       //
+MoistureSensor moist2(3,A2,"moist_A2");                       //
+MoistureSensor moist3(4,A3,"moist_A3");                       //
+                                                              //
+Tank tank(5,"g_tank",3,2);                                    //
+Pump pump(6,4,"g_pump");                                      //
+UVsensor uv(7,A4,"uv_sensor");                                //
+TemperatureSensor themp(8,7,"thermometer");                   //
+                                                              //
+Valve valve0(9,6,  "valve0");                                 //
+Valve valve1(10,8, "valve1");                                 //
+Valve valve2(11,9, "valve2");                                 //
+Valve valve3(12,10,"valve3");                                 //
+Section section0(20,"section0",20,90,&valve0 );               //
+Section section1(20,"section1",20,90,&valve1 );               //
+Section section2(20,"section2",20,90,&valve2 );               //
+Section section3(20,"section3",20,90,&valve3 );               //
+                                                              //
+byte buttonPin = 12;                                          //
+Entity *entities[]{                                           //
+  &moist0, &moist1, &moist2, &moist3,                         //
+  &valve0, &valve1, &valve2, &valve3,                         //
+  &tank, &pump, &uv, &themp,                                  //
+  &section0,                                                  //
+  &section1,                                                  //
+  &section2,                                                  //
+  &section3                                                   //
+};                                                            //
+//============================================================//
 
 void setup()
 {

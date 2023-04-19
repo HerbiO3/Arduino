@@ -1,9 +1,7 @@
-#include "UVsensor.h"
+#include "UVsensor.hpp"
 
-UVsensor::UVsensor(byte id, byte pin, String name) {
-  this->id = id;
+UVsensor::UVsensor(byte id, byte pin, String name) : Entity(id,name) {
   this->pin = pin;
-  this->name = name;
 }
 
 float UVsensor::measure() {

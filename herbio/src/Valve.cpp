@@ -1,14 +1,19 @@
-#include "Valve.h"
+#include "Valve.hpp"
+#include <Arduino.h>
 
-Valve::Valve(byte id, byte pin, String name) {
-  this->id = id;
-  this->name = name;
+Valve::Valve(byte id, byte pin, String name) : Entity(id,name) {
   this->pin = pin;
   pinMode(pin, OUTPUT);
 }
 
-bool Valve::isOpen() {
-  return this->opened;
+bool Valve::open(){
+  digitalWrite(pin, HIGH);
+  this->opened = true;
+}
+
+bool Valve::close() {
+  digitalWrite(pin, LOW);
+  this->opened = false;
 }
 
 JsonObject Valve::toJson(JsonDocument &doc) {
@@ -21,6 +26,5 @@ boolean Valve::update(JsonObject &obj) {
   if (obj["id"] != this->id)
     return false;
   this->name = obj["name"].as<String>();
-  this->opened = obj["opened"];
   return true;
 }
