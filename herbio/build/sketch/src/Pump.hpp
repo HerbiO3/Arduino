@@ -18,8 +18,8 @@ class Pump : public Entity {
     byte kill();
     JsonObject toJson(JsonDocument &doc);
     boolean update(JsonObject &obj);
-     void dump(byte* buffer);
-     void load(byte* buffer);
+    void dump(byte* buffer);
+    void load(byte* buffer);
 };
 
 #endif

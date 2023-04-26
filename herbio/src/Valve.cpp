@@ -24,11 +24,7 @@ bool Valve::close() {
 
 
 JsonObject Valve::toJson(JsonDocument &doc) {
-  //JsonObject json = Entity::toJson(doc);
   JsonObject json = Entity::toJson(doc);
-  
-  Serial.print("name:");
-  Serial.print(this->name);
   json["value"] = this->opened;
   return json;
 }

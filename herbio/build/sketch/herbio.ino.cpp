@@ -26,39 +26,48 @@
 
 #define NAME_LEN_MAX 20
 
-//RTC_DS1307 rtc;
+RTC_DS1307 rtc;
 
 
 extern unsigned int __heap_start;
 extern void *__brkval;
 
 #line 33 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
+int freeStack();
+#line 40 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
 int freeMemory();
-#line 80 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
+#line 79 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
 void printRAMstate();
-#line 86 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
+#line 87 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
 void initObjs();
-#line 128 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
+#line 131 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
 void setup();
-#line 156 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
+#line 158 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
 void loop();
-#line 180 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
+#line 178 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
 void command_get_names();
-#line 193 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
+#line 194 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
 void _print_entity(Entity *e);
-#line 203 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
+#line 204 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
 void command_get_entity(byte id);
-#line 211 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
+#line 212 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
 byte atob(const char* str);
-#line 220 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
+#line 221 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
 bool startsWith(const char* base, const char* start);
-#line 225 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
+#line 226 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
 void execComand(const char* cmd);
-#line 267 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
+#line 270 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
 void update_entity();
-#line 275 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
+#line 278 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
 void checkSerial();
 #line 33 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
+int freeStack() {
+  // Allocate a local variable to get the current stack position
+  int current_stack_position = 0;
+  // Subtract the current stack position from the starting address of the stack
+  return ((int)&current_stack_position) - ((int)&__heap_start);
+}
+
 int freeMemory() {
   int free_memory;
   if((int)__brkval == 0) {
@@ -72,10 +81,11 @@ int freeMemory() {
   return free_memory;
 }
 
+
 // TODO:  STATE->MEMORY->INIT, updates 
 
 //======== Entities for the system =============================//
-//TempSensor themp(8,7,"thermometer");                          //
+TempSensor* themp;                          //
 MoistureSensor* moist0;
 MoistureSensor* moist1;
 MoistureSensor* moist2;
@@ -91,25 +101,18 @@ Section* section0     ;
 Section* section1     ;
 Section* section2     ;
 Section* section3     ;
-byte buttonPin = 12;                                            //
-Entity *all_ents[18]{                                           //
-  moist0, moist1, moist2, moist3,                           //
-  valve0, valve1, valve2, valve3,                           //
-  tank, pump, uvSensor,                                            //
-  /*themp,*/                                                   //
-  section0,                                                    //
-  section1,                                                    //
-  section2,                                                    //
-  section3,                                                    //
-  nullptr                                                       //
-};                                                              //
+byte buttonPin = 12;       
+                                     //
+Entity *all_ents[17]= {0};
                                                                 //
 //==============================================================//
 
 void printRAMstate(){
-  int f = freeMemory();
-  Serial.print("free memory: ");
-  Serial.println(f);
+  Serial.print("free heap: ");
+  Serial.println(freeMemory());
+  Serial.print("free stack: ");
+  Serial.println(freeStack());
+
 }
 
 void initObjs(){
@@ -117,30 +120,33 @@ void initObjs(){
   delay(1000);
   Serial.println("init Moisture:");
   printRAMstate();
-  moist0     = new MoistureSensor(1,A0,"moist_A0");
-  moist1     = new MoistureSensor(2,A1,"moist_A1");
-  moist2     = new MoistureSensor(3,A2,"moist_A2");
-  moist3     = new MoistureSensor(4,A3,"moist_A3");
+
+  all_ents[0] = themp      = new TempSensor(8,7,"thermo"); 
+  all_ents[1] = moist0     = new MoistureSensor(1,A0,"moist_A0");
+  all_ents[2] = moist1     = new MoistureSensor(2,A1,"moist_A1");
+  all_ents[3] = moist2     = new MoistureSensor(3,A2,"moist_A2");
+  all_ents[4] = moist3     = new MoistureSensor(4,A3,"moist_A3");
   delay(2000);
   Serial.println("init util:");
     printRAMstate();
-  tank       = new Tank(5,"tank",3,2); 
-  pump       = new Pump(6,4,"pump");                              
-  uvSensor   = new UVsensor(7,A4,"uv_7");
+  all_ents[5] = tank       = new Tank(5,"tank",3,2); 
+  all_ents[6] = pump       = new Pump(6,4,"pump");                              
+  all_ents[7] = uvSensor   = new UVsensor(7,A4,"uv_7");
   delay(2000);
   Serial.println("init valve:");
     printRAMstate();
-  valve0     = new Valve(9,6,  "valve0",pump);
-  valve1     = new Valve(10,8, "valve1",pump);
-  valve2     = new Valve(11,9, "valve2",pump);
-  valve3     = new Valve(12,10,"valve3",pump);
+  all_ents[8] = valve0     = new Valve(9,6,  "valve0",pump);
+  all_ents[9] = valve1     = new Valve(10,8, "valve1",pump);
+  all_ents[10] = valve2     = new Valve(11,9, "valve2",pump);
+  all_ents[11] = valve3     = new Valve(12,10,"valve3",pump);
   delay(2000);
   Serial.println("init Section:");
   printRAMstate();
-  section0   = new Section(20, "section0",20,90,valve0, moist0);
-  section1   = new Section(21, "section1",20,90,valve1, moist1);
-  section2   = new Section(22, "section2",20,90,valve2, moist2);
-  section3   = new Section(23, "section3",20,90,valve3, moist3);
+  all_ents[12] = section0   = new Section(20, "section0",20,90,valve0, moist0);
+  all_ents[13] = section1   = new Section(21, "section1",20,90,valve1, moist1);
+  all_ents[14] = section2   = new Section(22, "section2",20,90,valve2, moist2);
+  all_ents[15] = section3   = new Section(23, "section3",20,90,valve3, moist3);
+
   section0->global_entites = all_ents;
   section1->global_entites = all_ents;
   section2->global_entites = all_ents;
@@ -149,7 +155,6 @@ void initObjs(){
   printRAMstate();
   pinMode(buttonPin, INPUT);
   Serial.println("init DONE...");
-
 }
 
 
@@ -170,9 +175,9 @@ void setup()
 
 
 
-  //Wire.begin();
-  //rtc.begin();
-  //rtc.adjust(DateTime(F(__DATE__), F(__TIME__))); // set RTC time to compile time
+  Wire.begin();
+  rtc.begin();
+  rtc.adjust(DateTime(__DATE__, __TIME__)); // set RTC time to compile time
 
   // setup pins
   // declare relay as output
@@ -180,19 +185,14 @@ void setup()
   
 }
 
-char timestamp[20];
-unsigned long watchdog=0;
-void loop(){
-  watchdog++;
-  if(watchdog % 20000 == 0){
-    Serial.print("watchdog: ");
-    Serial.println(watchdog);
-    Serial.println("im alive");
-    //sprintf(timestamp, "%02d/%02d/%02d-%02d:%02d:%02d", now.year(), now.month(), now.day(), now.hour(), now.minute(),now.second()); // format timestamp
-    //Serial.print(rtc.now().secondstime());
-    //Serial.println(timestamp);
 
-  }
+void loop(){
+  
+    //Serial.println("im alive");
+    //sprintf(timestamp, "%02d/%02d/%02d-%02d:%02d:%02d", rtc.now().year(), rtc.now().month(), rtc.now().day(), rtc.now().hour(), rtc.now().minute(),rtc.now().second()); // format timestamp
+    //Serial.println(rtc.now().secondstime());
+
+  
   checkSerial();
 /*
   section0.action(rtc.now().secondstime());
@@ -205,15 +205,18 @@ void loop(){
 
 
 
-StaticJsonDocument<768> doc;
+StaticJsonDocument<512> doc;
 void command_get_names(){ // total: 559;  po2: 768  (closest power of 2)
-  Serial.println("getting names...");
+  //Serial.println("getting names...");
   doc.clear();
   Entity *e;
   Entity **it = all_ents;
   while((e = *it)){
-    e->toJson(doc);
+    JsonObject obji = doc.createNestedObject();
+    obji["id"] = e->id;
+    obji["name"] = e->name;
     it++;
+    printRAMstate();
   }
   serializeJson(doc,Serial);  
   Serial.println();
@@ -235,7 +238,7 @@ void command_get_entity(byte id){
     Serial.print("Not found id");
     Serial.print(id);
   }
-  _print_entity(e);
+  else _print_entity(e);
 }
 byte atob(const char* str) {
   byte result = 0;
@@ -265,19 +268,21 @@ void execComand(const char* cmd){
       words[nWords++] = cmd+i+1;
     }
   }
+
   if(startsWith(words[0],"get")){  // command get <NAME_OF_ENTITY> prints Json of entity to Serial.
     if(nWords >=1 && startsWith(words[1],"all")){
-      Serial.print("getting all entities");
+      //Serial.println("getting all entities");
       command_get_names();
     }
+    if(nWords >=1 && startsWith(words[1],"ram")){
+      printRAMstate();
+    }
     else if(nWords >=1 && startsWith(words[1],"time")){
-      char buff[30];
-     // rtc.now().toString(buff);
-      Serial.println(buff);
+      Serial.println(rtc.now().timestamp());
     }
     else if(nWords >=1){ // TREAT AS ID      
       byte id = atob(words[1]); //atoi for 2digit
-      Serial.print("Gettig entity ");
+      //Serial.print("Gettig entity ");
       Serial.println(id);
       command_get_entity(id);
     } else {Serial.println("neplatny prikaz");}
@@ -285,10 +290,10 @@ void execComand(const char* cmd){
 
   if(strcmp(words[0],"set") ==0){
     if(strcmp(words[1],"time") ==0){
-    /*  if(strcmp(words[2],"iso") ==0)
+      if(strcmp(words[2],"iso") ==0)
         rtc.adjust(DateTime(words[2]));
       if(strcmp(words[2],"epoch") ==0)
-        rtc.adjust(DateTime(atol(words[2])));*/
+        rtc.adjust(DateTime(atol(words[2])));
     }
   }
 }

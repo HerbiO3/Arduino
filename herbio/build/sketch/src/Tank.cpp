@@ -33,6 +33,8 @@ JsonObject Tank::toJson(JsonDocument &doc) {
   JsonObject json = Entity::toJson(doc);
   json["dist_full"] = dist_full;
   json["dist_empty"] = dist_empty;
+  json["value"] = measure();
+
   return json;
 }
 
