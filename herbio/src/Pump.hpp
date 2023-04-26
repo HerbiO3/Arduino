@@ -6,16 +6,23 @@
 class Pump : public Entity {
   private:
     byte pin;
-    bool running;
+    byte running;
     
   public: 
     Pump();
-    Pump(byte id, byte pin, String name);
+    Pump(byte id, byte pin, const char* name);
 
-    void turn(bool on);
-
-    virtual JsonObject toJson(JsonDocument &doc) override;
-    virtual boolean update(JsonObject &obj) override;
+    byte down();
+    byte up();
+    byte kill();
+    JsonObject toJson(JsonDocument &doc);
+    boolean update(JsonObject &obj);
+     void dump(byte* buffer);
+     void load(byte* buffer);
 };
 
 #endif
+
+
+
+

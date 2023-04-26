@@ -1,0 +1,12 @@
+#line 1 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\library.json"
+{
+  "name": "herbio",
+  "dependencies": {
+    "DallasTemperature": "3.9.0",
+    "ArduinoJson": "^6.18.5",
+    "OneWire": "2.3.5",
+    "Wire": "1.0.1",
+    "RTClib": "1.12.5",
+    "LinkedList": "1.2.3"
+  }
+}

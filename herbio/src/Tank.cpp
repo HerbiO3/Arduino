@@ -1,14 +1,12 @@
 #include "Tank.hpp"
 
-Tank::Tank(byte id, String name, byte echoPin, byte trigPin) : Entity(id,name) {
+Tank::Tank(byte id, const char* name, byte echoPin, byte trigPin) : Entity(id,name) {
   this->echoPin = echoPin;
   this->trigPin = trigPin;
   this->dist_full = this->dist_empty = 0;
-
 }
 
-Tank::Tank(byte id, String name, byte echoPin, byte trigPin, uint16_t dist_full, uint16_t dist_empty) : Tank(id, name, echoPin, trigPin){
-  
+Tank::Tank(byte id, const char* name, byte echoPin, byte trigPin, uint16_t dist_full, uint16_t dist_empty) : Tank(id, name, echoPin, trigPin){
   this->dist_full = dist_full;
   this->dist_empty = dist_empty;
 }
@@ -29,21 +27,6 @@ float Tank::measure() {
   return value;
 }
 
-void Tank::setDist_full(uint16_t dist_full) {
-  this->dist_full = dist_full;
-}
-
-short Tank::getDist_full() {
-  return dist_full;
-}
-
-void Tank::setDist_empty(uint16_t dist_empty) {
-  this->dist_empty = dist_empty;
-}
-
-short Tank::getDist_empty() {
-  return dist_empty;
-}
 
 JsonObject Tank::toJson(JsonDocument &doc) {
   JsonObject json = Entity::toJson(doc);
@@ -53,9 +36,8 @@ JsonObject Tank::toJson(JsonDocument &doc) {
 }
 
 boolean Tank::update(JsonObject &obj) {
-  if(obj["id"] != id)
+  if(! Entity::update(obj))
     return false;
-  name = obj["name"].as<String>();
   if(obj["dist_full"])
     dist_full = obj["dist_full"];
   if(obj["dist_empty"])
@@ -65,4 +47,12 @@ boolean Tank::update(JsonObject &obj) {
 
 Measurable* Tank::getMeasurable() {
   return this;
+}
+
+
+void Tank::dump(byte* buffer){
+  memcpy(buffer, this, sizeof(Tank));
+}
+void Tank::load(byte* buffer) {
+  memcpy(this, buffer, sizeof(Tank));
 }

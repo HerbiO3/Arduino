@@ -4,6 +4,7 @@
 #include "Entity.hpp"
 #include "Measurable.hpp"
 #include <ArduinoJson.h>
+#include <Arduino.h>
 
 class MoistureSensor : public Entity, public Measurable {
   private:
@@ -12,11 +13,14 @@ class MoistureSensor : public Entity, public Measurable {
     
   public:
     MoistureSensor();
-    MoistureSensor(byte id, byte pin, String name);
-    virtual JsonObject toJson(JsonDocument &doc) override;
-    virtual boolean update(JsonObject &obj) override;
-    virtual float measure() override;
-    virtual Measurable* getMeasurable() override;
+    MoistureSensor(byte id, byte pin, const char* name);
+     JsonObject toJson(JsonDocument &doc) ;
+     float measure();
+     Measurable* getMeasurable();
+     void dump(byte* buffer);
+     void load(byte* buffer);
 };
 
 #endif
+
+

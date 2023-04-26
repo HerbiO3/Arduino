@@ -7,14 +7,17 @@
 #include "Measurable.hpp"
 #include <ArduinoJson.h>
 //SINGLETON (due to initalizing DallasTem. in constructor)
-class TemperatureSensor : public Entity, public Measurable {
+class TempSensor : public Entity, public Measurable {
   public:
-    TemperatureSensor();
-    TemperatureSensor(byte id, byte pin, String name);
-    float measure();
+    TempSensor();
+    TempSensor(byte id, byte pin, const char* name);
+    //boolean update(JsonObject &obj);
     JsonObject toJson(JsonDocument& doc);
-    boolean update(JsonObject& obj);
+    float measure();
+    
     Measurable* getMeasurable();
+     void dump(byte* buffer);
+     void load(byte* buffer);
 
   private:
     OneWire oneWire;

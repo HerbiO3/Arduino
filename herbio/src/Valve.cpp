@@ -1,30 +1,40 @@
 #include "Valve.hpp"
+#include "Pump.hpp"
 #include <Arduino.h>
 
-Valve::Valve(byte id, byte pin, String name) : Entity(id,name) {
+Valve::Valve(byte id, byte pin, const char* name, Pump *pump) : Entity(id,name) {
   this->pin = pin;
+  this->pump = pump;
   pinMode(pin, OUTPUT);
 }
 
 bool Valve::open(){
+  if(this->opened) return; //already opened
   digitalWrite(pin, HIGH);
   this->opened = true;
+  pump->up();
 }
 
 bool Valve::close() {
+  if(!this->opened) return;//already closed
   digitalWrite(pin, LOW);
   this->opened = false;
+   pump->down();
 }
 
+
 JsonObject Valve::toJson(JsonDocument &doc) {
+  //JsonObject json = Entity::toJson(doc);
   JsonObject json = Entity::toJson(doc);
+  
+  Serial.print("name:");
+  Serial.print(this->name);
   json["value"] = this->opened;
   return json;
 }
-
-boolean Valve::update(JsonObject &obj) {
-  if (obj["id"] != this->id)
-    return false;
-  this->name = obj["name"].as<String>();
-  return true;
+void Valve::dump(byte* buffer){
+  memcpy(buffer, this, sizeof(Valve));
+}
+void Valve::load(byte* buffer) {
+  memcpy(this, buffer, sizeof(Valve));
 }

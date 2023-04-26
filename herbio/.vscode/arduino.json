@@ -1,4 +1,6 @@
 {
     "board": "arduino:avr:leonardo",
-    "sketch": "herbio.ino"
+    "sketch": "herbio.ino",
+    "port": "COM3",
+    "output": "./build/"
 }

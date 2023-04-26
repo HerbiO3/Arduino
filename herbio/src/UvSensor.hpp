@@ -11,11 +11,15 @@ class UVsensor : public Entity, public Measurable {
   
   public:
     UVsensor(){};
-    UVsensor(byte id, byte pin, String name);
+    UVsensor(byte id, byte pin, const char* name);
     float measure();
     JsonObject toJson(JsonDocument &doc);
-    boolean update(JsonObject &obj);
+    //boolean update(JsonObject &obj);
     Measurable* getMeasurable();
+     void dump(byte* buffer);
+     void load(byte* buffer);
 };
 
 #endif
+
+

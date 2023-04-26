@@ -4,32 +4,41 @@
 #include "Entity.hpp"
 #include "Valve.hpp"
 #include "MoistSensor.hpp"
-typedef uint32_t time_t;
+#include "RTClib.h"
 
-enum MODE{MANUAL,AUTO,DEAD};
+typedef uint32_t time_t;
+enum MODE{AUTO,TIMED,MANUAL};
 
 class Section : public Entity {
+
 public:
+  Entity **global_entites;
   int unit;
   MODE mode;
   unsigned char min_humid;
   time_t water_time;
+  time_t water_until;
 
-  time_t timer_start;
-  time_t timer_end;
-
+  time_t water_start;
+  time_t water_next;
+  bool watered;
   Valve* valve;
   MoistureSensor *moisture;
   Section();
-  Section(byte id,String name, byte min_humid, time_t water_time, Valve *valve);
-  Section* setValve(Valve *valve);
-  Section* setTimer(time_t time_start, time_t time_end);
-  Section* setMinHumid(byte min_humid);
-  Section* setWaterTime(time_t water_time);
-  Section* setMoistureSensor(MoistureSensor *sensor);
-
+  Section(byte id, const char* name, byte min_humid, time_t water_time, Valve *valve, MoistureSensor *moisture);
   JsonObject toJson(JsonDocument &doc);
   boolean update(JsonObject &obj);
+/**
+ * @param current_time real time in seconds from 2000-01-01
+*/
+  void action(time_t current_time);
+   void dump(byte* buffer);
+   void load(byte* buffer);
+
+private: 
+  void checkAndStopWater(time_t curr_time);
+  void water(time_t curr_time);
+
 };
 
 #endif

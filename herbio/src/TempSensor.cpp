@@ -1,33 +1,33 @@
 #include "TempSensor.hpp"
 
 //SINGLETON
-TemperatureSensor::TemperatureSensor() {}
+TempSensor::TempSensor() {}
 
-TemperatureSensor::TemperatureSensor(byte id, byte pin, String name) : Entity(id,name) {
+TempSensor::TempSensor(byte id, byte pin, const char* name) : Entity(id,name) {
   this->oneWire = OneWire(pin);
   this->tempSensors = DallasTemperature(&oneWire);
   this->tempSensors.begin();
 }
 
-float TemperatureSensor::measure() {
+float TempSensor::measure() {
   tempSensors.requestTemperatures();
   return tempSensors.getTempCByIndex(0);
 }
 
-JsonObject TemperatureSensor::toJson(JsonDocument& doc) {
+JsonObject TempSensor::toJson(JsonDocument &doc) {
   JsonObject json = Entity::toJson(doc);
   json["value"] = this->measure();
   return json;
 }
 
-boolean TemperatureSensor::update(JsonObject& obj) {
-  if (obj["id"] != this->id) {
-    return false;
-  }
-  this->name = obj["name"].as<String>();
-  return true;
+
+Measurable* TempSensor::getMeasurable() {
+  return this;
 }
 
-Measurable* TemperatureSensor::getMeasurable() {
-  return this;
+void TempSensor::dump(byte* buffer){
+  memcpy(buffer, this, sizeof(TempSensor));
+}
+void TempSensor::load(byte* buffer) {
+  memcpy(this, buffer, sizeof(TempSensor));
 }

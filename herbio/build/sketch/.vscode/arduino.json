@@ -1,0 +1,7 @@
+#line 1 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\.vscode\\arduino.json"
+{
+    "board": "arduino:avr:leonardo",
+    "sketch": "herbio.ino",
+    "port": "COM3",
+    "output": "./build/"
+}

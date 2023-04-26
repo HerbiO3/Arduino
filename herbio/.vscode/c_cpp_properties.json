@@ -20,7 +20,8 @@
                 "_DEBUG",
                 "UNICODE",
                 "_UNICODE"
-            ]
+            ],
+            "compileCommands": "${workspaceFolder}/build/compile_commands.json"
         },
         {
             "name": "Arduino",
@@ -42,9 +43,10 @@
                 "C:\\Users\\Matej-Windows\\Documents\\Arduino\\libraries\\DallasTemperature",
                 "C:\\Users\\Matej-Windows\\Documents\\Arduino\\libraries\\OneWire",
                 "C:\\Users\\Matej-Windows\\Documents\\Arduino\\libraries\\ArduinoJson\\src",
-                "C:\\Users\\Matej-Windows\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
                 "C:\\Users\\Matej-Windows\\Documents\\Arduino\\libraries\\RTClib\\src",
                 "C:\\Users\\Matej-Windows\\Documents\\Arduino\\libraries\\Adafruit_BusIO",
+                "C:\\Users\\Matej-Windows\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
+                "C:\\Users\\Matej-Windows\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\EEPROM\\src",
                 "C:\\Users\\Matej-Windows\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\SPI\\src",
                 "c:\\users\\matej-windows\\appdata\\local\\arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7\\lib\\gcc\\avr\\7.3.0\\include",
                 "c:\\users\\matej-windows\\appdata\\local\\arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7\\lib\\gcc\\avr\\7.3.0\\include-fixed",

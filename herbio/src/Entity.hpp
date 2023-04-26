@@ -4,16 +4,21 @@
 #include <ArduinoJson.h> 
 #include "Measurable.hpp"
 #include <Arduino.h>
+#define NAME_LENGTH 15
 
 class Entity  {
   public: 
   byte id;
-  String name;
+  const char *name; // not enough space to allocate, * -> .text
   Entity();
-  Entity(byte id, String name);
-  virtual boolean update(JsonObject &doc) = 0;
+  Entity(byte id, const char* name);
   virtual Measurable* getMeasurable(){return nullptr;};  // returns (this) as Measurable, or nullptr.  shortcut for -fno-rtti (no dymamic_cast) 
   virtual JsonObject toJson(JsonDocument& doc);
-};
+  virtual boolean update(JsonObject &obj);
+  void eToJson(JsonObject &json);
 
+  virtual void dump(byte* buffer)=0;
+  virtual void load(byte* buffer)=0;
+};
+Entity* getEntity(Entity* entities[], byte id);
 #endif

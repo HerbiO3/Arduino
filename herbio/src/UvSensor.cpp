@@ -1,6 +1,6 @@
 #include "UVsensor.hpp"
 
-UVsensor::UVsensor(byte id, byte pin, String name) : Entity(id,name) {
+UVsensor::UVsensor(byte id, byte pin, const char* name) : Entity(id,name) {
   this->pin = pin;
 }
 
@@ -14,13 +14,13 @@ JsonObject UVsensor::toJson(JsonDocument &doc) {
   return json;
 }
 
-boolean UVsensor::update(JsonObject &obj) {
-  if(obj["id"] != this->id)
-    return false;
-  this->name = obj["name"].as<String>();
-  return true;
-}
-
 Measurable* UVsensor::getMeasurable() {
   return this;
+}
+
+void UVsensor::dump(byte* buffer){
+  memcpy(buffer, this, sizeof(UVsensor));
+}
+void UVsensor::load(byte* buffer) {
+  memcpy(this, buffer, sizeof(UVsensor));
 }
