@@ -1,11 +1,11 @@
 {
-  "additionalFiles": "..\\..\\..,..\\..\\..,..\\..\\..,..\\..,..\\..\\..\\..,..\\..\\..,..\\..\\..,..\\..\\..,..\\..\\..,..\\..\\..,..\\..\\..,..\\..\\..,..\\..\\..,..\\..\\..,..\\..\\..,..\\..\\..,..\\..\\..,..\\..\\..,..\\..\\..,..\\..\\..,..\\..\\..,..\\..\\..",
+  "additionalFiles": "../../..,../../..,../../..,../..,../../../..,../../..,../../..,../../..,../../..,../../..,../../..,../../..,../../..,../../..,../../..,../../..,../../..,../../..,../../..,../../..,../../..,../../..",
   "builtInToolsFolders": "",
   "compiler.optimization_flags": "",
   "customBuildProperties": "",
   "fqbn": "arduino:avr:leonardo",
-  "hardwareFolders": "C:\\Users\\Matej-Windows\\AppData\\Local\\Arduino15\\packages",
-  "otherLibrariesFolders": "C:\\Users\\Matej-Windows\\Documents\\Arduino\\libraries",
+  "hardwareFolders": "/home/nixer/.arduino15/packages",
+  "otherLibrariesFolders": "/home/nixer/Arduino/libraries",
   "runtime.ide.version": "10607",
-  "sketchLocation": "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio"
+  "sketchLocation": "/home/nixer/Desktop/arduino/herbio"
 }

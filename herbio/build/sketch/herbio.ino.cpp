@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#line 1 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
+#line 1 "/home/nixer/Desktop/arduino/herbio/herbio.ino"
 #include <DallasTemperature.h>
 #include <ArduinoJson.h>
 //#include <OneWire.h>
@@ -57,31 +57,31 @@ Entity *all_ents[17]= {0};
                                                                 //
 //==============================================================//
 
-#line 58 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
+#line 58 "/home/nixer/Desktop/arduino/herbio/herbio.ino"
 void initObjs();
-#line 86 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
+#line 86 "/home/nixer/Desktop/arduino/herbio/herbio.ino"
 void load_entities();
-#line 95 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
+#line 95 "/home/nixer/Desktop/arduino/herbio/herbio.ino"
 void update_EEPROM_entities();
-#line 106 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
+#line 106 "/home/nixer/Desktop/arduino/herbio/herbio.ino"
 void setup();
-#line 129 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
+#line 131 "/home/nixer/Desktop/arduino/herbio/herbio.ino"
 void loop();
-#line 151 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
+#line 153 "/home/nixer/Desktop/arduino/herbio/herbio.ino"
 void command_get_names();
-#line 166 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
+#line 168 "/home/nixer/Desktop/arduino/herbio/herbio.ino"
 void _print_entity(Entity *e);
-#line 187 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
+#line 189 "/home/nixer/Desktop/arduino/herbio/herbio.ino"
 bool startsWith(const char* base, const char* start);
-#line 190 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
+#line 192 "/home/nixer/Desktop/arduino/herbio/herbio.ino"
 byte atob(const char* str);
-#line 199 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
+#line 201 "/home/nixer/Desktop/arduino/herbio/herbio.ino"
 byte execComand(const char* cmd);
-#line 242 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
+#line 244 "/home/nixer/Desktop/arduino/herbio/herbio.ino"
 bool update_entity();
-#line 254 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
+#line 256 "/home/nixer/Desktop/arduino/herbio/herbio.ino"
 void checkSerial();
-#line 58 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
+#line 58 "/home/nixer/Desktop/arduino/herbio/herbio.ino"
 void initObjs(){
   all_ents[0] = themp      = new TempSensor(8,7,"thermo"); 
   all_ents[1] = moist0     = new MoistureSensor(0,A0,"moist_A0");
@@ -132,10 +132,12 @@ void update_EEPROM_entities(){
 
 void setup()
 {
+  
   Serial.begin(9600);
   while(!Serial.available());
   initObjs();
   EEPROM.begin();
+  //EEPROM.update(EEPROM_ENTITIES_WRITTEN_FLAG_ADDRESS, -1);
   if(EEPROM.read(EEPROM_ENTITIES_WRITTEN_FLAG_ADDRESS) == 1){ //update only if entities were written first
     Serial.println("loading EEPROM");
     load_entities();

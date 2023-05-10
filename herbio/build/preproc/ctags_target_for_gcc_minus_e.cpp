@@ -1,10 +1,10 @@
-# 1 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
-# 2 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino" 2
-# 3 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino" 2
+# 1 "/home/nixer/Desktop/arduino/herbio/herbio.ino"
+# 2 "/home/nixer/Desktop/arduino/herbio/herbio.ino" 2
+# 3 "/home/nixer/Desktop/arduino/herbio/herbio.ino" 2
 //#include <OneWire.h>
 //#include <Wire.h>
-# 6 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino" 2
-# 7 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino" 2
+# 6 "/home/nixer/Desktop/arduino/herbio/herbio.ino" 2
+# 7 "/home/nixer/Desktop/arduino/herbio/herbio.ino" 2
 
 
 //#include <Arduino.h>
@@ -13,15 +13,15 @@
 
 
 //======Custom objects=============//
-# 16 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino" 2
+# 16 "/home/nixer/Desktop/arduino/herbio/herbio.ino" 2
 
-# 18 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino" 2
-# 19 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino" 2
-# 20 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino" 2
-# 21 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino" 2
-# 22 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino" 2
-# 23 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino" 2
-# 24 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino" 2
+# 18 "/home/nixer/Desktop/arduino/herbio/herbio.ino" 2
+# 19 "/home/nixer/Desktop/arduino/herbio/herbio.ino" 2
+# 20 "/home/nixer/Desktop/arduino/herbio/herbio.ino" 2
+# 21 "/home/nixer/Desktop/arduino/herbio/herbio.ino" 2
+# 22 "/home/nixer/Desktop/arduino/herbio/herbio.ino" 2
+# 23 "/home/nixer/Desktop/arduino/herbio/herbio.ino" 2
+# 24 "/home/nixer/Desktop/arduino/herbio/herbio.ino" 2
 //=================================//
 
 
@@ -106,10 +106,12 @@ void update_EEPROM_entities(){
 
 void setup()
 {
+
   Serial.begin(9600);
   while(!Serial.available());
   initObjs();
   EEPROM.begin();
+  //EEPROM.update(EEPROM_ENTITIES_WRITTEN_FLAG_ADDRESS, -1);
   if(EEPROM.read(0 /* signal that entities were saved into memory*/) == 1){ //update only if entities were written first
     Serial.println("loading EEPROM");
     load_entities();
@@ -176,25 +178,15 @@ void _print_entity(Entity *e){
 
 
 /*
-
 void command_get_entity(byte id){
-
   Entity *e = getEntity(all_ents,id);
-
   if(!e){
-
     Serial.print("Not found id: ");
-
     Serial.print(id);
-
   }
-
   else _print_entity(e);
-
 }
-
 */
-# 187 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
 bool startsWith(const char* base, const char* start){
     return !strncmp(base,start, strlen(start));
 }

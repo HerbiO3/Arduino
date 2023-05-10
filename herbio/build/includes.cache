@@ -2,170 +2,170 @@
   {
     "Sourcefile": null,
     "Include": "",
-    "Includepath": "C:\\Users\\Matej-Windows\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino"
+    "Includepath": "/home/nixer/.arduino15/packages/arduino/hardware/avr/1.8.6/cores/arduino"
   },
   {
     "Sourcefile": null,
     "Include": "",
-    "Includepath": "C:\\Users\\Matej-Windows\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\leonardo"
+    "Includepath": "/home/nixer/.arduino15/packages/arduino/hardware/avr/1.8.6/variants/leonardo"
   },
   {
-    "Sourcefile": "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\build\\sketch\\herbio.ino.cpp",
+    "Sourcefile": "/home/nixer/Desktop/arduino/herbio/build/sketch/herbio.ino.cpp",
     "Include": "DallasTemperature.h",
-    "Includepath": "C:\\Users\\Matej-Windows\\Documents\\Arduino\\libraries\\DallasTemperature"
+    "Includepath": "/home/nixer/Arduino/libraries/DallasTemperature"
   },
   {
-    "Sourcefile": "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\build\\sketch\\herbio.ino.cpp",
+    "Sourcefile": "/home/nixer/Desktop/arduino/herbio/build/sketch/herbio.ino.cpp",
     "Include": "OneWire.h",
-    "Includepath": "C:\\Users\\Matej-Windows\\Documents\\Arduino\\libraries\\OneWire"
+    "Includepath": "/home/nixer/Arduino/libraries/OneWire"
   },
   {
-    "Sourcefile": "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\build\\sketch\\herbio.ino.cpp",
+    "Sourcefile": "/home/nixer/Desktop/arduino/herbio/build/sketch/herbio.ino.cpp",
     "Include": "ArduinoJson.h",
-    "Includepath": "C:\\Users\\Matej-Windows\\Documents\\Arduino\\libraries\\ArduinoJson\\src"
+    "Includepath": "/home/nixer/Arduino/libraries/ArduinoJson/src"
   },
   {
-    "Sourcefile": "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\build\\sketch\\herbio.ino.cpp",
+    "Sourcefile": "/home/nixer/Desktop/arduino/herbio/build/sketch/herbio.ino.cpp",
     "Include": "RTClib.h",
-    "Includepath": "C:\\Users\\Matej-Windows\\Documents\\Arduino\\libraries\\RTClib\\src"
+    "Includepath": "/home/nixer/Arduino/libraries/RTClib/src"
   },
   {
-    "Sourcefile": "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\build\\sketch\\herbio.ino.cpp",
+    "Sourcefile": "/home/nixer/Desktop/arduino/herbio/build/sketch/herbio.ino.cpp",
     "Include": "Adafruit_I2CDevice.h",
-    "Includepath": "C:\\Users\\Matej-Windows\\Documents\\Arduino\\libraries\\Adafruit_BusIO"
+    "Includepath": "/home/nixer/Arduino/libraries/Adafruit_BusIO"
   },
   {
-    "Sourcefile": "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\build\\sketch\\herbio.ino.cpp",
+    "Sourcefile": "/home/nixer/Desktop/arduino/herbio/build/sketch/herbio.ino.cpp",
     "Include": "Wire.h",
-    "Includepath": "C:\\Users\\Matej-Windows\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src"
+    "Includepath": "/home/nixer/.arduino15/packages/arduino/hardware/avr/1.8.6/libraries/Wire/src"
   },
   {
-    "Sourcefile": "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\build\\sketch\\herbio.ino.cpp",
+    "Sourcefile": "/home/nixer/Desktop/arduino/herbio/build/sketch/herbio.ino.cpp",
     "Include": "EEPROM.h",
-    "Includepath": "C:\\Users\\Matej-Windows\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\EEPROM\\src"
+    "Includepath": "/home/nixer/.arduino15/packages/arduino/hardware/avr/1.8.6/libraries/EEPROM/src"
   },
   {
-    "Sourcefile": "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\build\\sketch\\herbio.ino.cpp",
+    "Sourcefile": "/home/nixer/Desktop/arduino/herbio/build/sketch/herbio.ino.cpp",
     "Include": "",
     "Includepath": null
   },
   {
-    "Sourcefile": "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\build\\sketch\\src\\Entity.cpp",
+    "Sourcefile": "/home/nixer/Desktop/arduino/herbio/build/sketch/src/Entity.cpp",
     "Include": "",
     "Includepath": null
   },
   {
-    "Sourcefile": "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\build\\sketch\\src\\MoistSensor.cpp",
+    "Sourcefile": "/home/nixer/Desktop/arduino/herbio/build/sketch/src/MoistSensor.cpp",
     "Include": "",
     "Includepath": null
   },
   {
-    "Sourcefile": "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\build\\sketch\\src\\Pump.cpp",
+    "Sourcefile": "/home/nixer/Desktop/arduino/herbio/build/sketch/src/Pump.cpp",
     "Include": "",
     "Includepath": null
   },
   {
-    "Sourcefile": "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\build\\sketch\\src\\Section.cpp",
+    "Sourcefile": "/home/nixer/Desktop/arduino/herbio/build/sketch/src/Section.cpp",
     "Include": "",
     "Includepath": null
   },
   {
-    "Sourcefile": "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\build\\sketch\\src\\Tank.cpp",
+    "Sourcefile": "/home/nixer/Desktop/arduino/herbio/build/sketch/src/Tank.cpp",
     "Include": "",
     "Includepath": null
   },
   {
-    "Sourcefile": "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\build\\sketch\\src\\TempSensor.cpp",
+    "Sourcefile": "/home/nixer/Desktop/arduino/herbio/build/sketch/src/TempSensor.cpp",
     "Include": "",
     "Includepath": null
   },
   {
-    "Sourcefile": "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\build\\sketch\\src\\UvSensor.cpp",
+    "Sourcefile": "/home/nixer/Desktop/arduino/herbio/build/sketch/src/UvSensor.cpp",
     "Include": "",
     "Includepath": null
   },
   {
-    "Sourcefile": "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\build\\sketch\\src\\Valve.cpp",
+    "Sourcefile": "/home/nixer/Desktop/arduino/herbio/build/sketch/src/Valve.cpp",
     "Include": "",
     "Includepath": null
   },
   {
-    "Sourcefile": "C:\\Users\\Matej-Windows\\Documents\\Arduino\\libraries\\DallasTemperature\\DallasTemperature.cpp",
+    "Sourcefile": "/home/nixer/Arduino/libraries/DallasTemperature/DallasTemperature.cpp",
     "Include": "",
     "Includepath": null
   },
   {
-    "Sourcefile": "C:\\Users\\Matej-Windows\\Documents\\Arduino\\libraries\\OneWire\\OneWire.cpp",
+    "Sourcefile": "/home/nixer/Arduino/libraries/OneWire/OneWire.cpp",
     "Include": "",
     "Includepath": null
   },
   {
-    "Sourcefile": "C:\\Users\\Matej-Windows\\Documents\\Arduino\\libraries\\RTClib\\src\\RTC_DS1307.cpp",
+    "Sourcefile": "/home/nixer/Arduino/libraries/RTClib/src/RTC_DS1307.cpp",
     "Include": "",
     "Includepath": null
   },
   {
-    "Sourcefile": "C:\\Users\\Matej-Windows\\Documents\\Arduino\\libraries\\RTClib\\src\\RTC_DS3231.cpp",
+    "Sourcefile": "/home/nixer/Arduino/libraries/RTClib/src/RTC_DS3231.cpp",
     "Include": "",
     "Includepath": null
   },
   {
-    "Sourcefile": "C:\\Users\\Matej-Windows\\Documents\\Arduino\\libraries\\RTClib\\src\\RTC_Micros.cpp",
+    "Sourcefile": "/home/nixer/Arduino/libraries/RTClib/src/RTC_Micros.cpp",
     "Include": "",
     "Includepath": null
   },
   {
-    "Sourcefile": "C:\\Users\\Matej-Windows\\Documents\\Arduino\\libraries\\RTClib\\src\\RTC_Millis.cpp",
+    "Sourcefile": "/home/nixer/Arduino/libraries/RTClib/src/RTC_Millis.cpp",
     "Include": "",
     "Includepath": null
   },
   {
-    "Sourcefile": "C:\\Users\\Matej-Windows\\Documents\\Arduino\\libraries\\RTClib\\src\\RTC_PCF8523.cpp",
+    "Sourcefile": "/home/nixer/Arduino/libraries/RTClib/src/RTC_PCF8523.cpp",
     "Include": "",
     "Includepath": null
   },
   {
-    "Sourcefile": "C:\\Users\\Matej-Windows\\Documents\\Arduino\\libraries\\RTClib\\src\\RTC_PCF8563.cpp",
+    "Sourcefile": "/home/nixer/Arduino/libraries/RTClib/src/RTC_PCF8563.cpp",
     "Include": "",
     "Includepath": null
   },
   {
-    "Sourcefile": "C:\\Users\\Matej-Windows\\Documents\\Arduino\\libraries\\RTClib\\src\\RTClib.cpp",
+    "Sourcefile": "/home/nixer/Arduino/libraries/RTClib/src/RTClib.cpp",
     "Include": "",
     "Includepath": null
   },
   {
-    "Sourcefile": "C:\\Users\\Matej-Windows\\Documents\\Arduino\\libraries\\Adafruit_BusIO\\Adafruit_BusIO_Register.cpp",
+    "Sourcefile": "/home/nixer/Arduino/libraries/Adafruit_BusIO/Adafruit_BusIO_Register.cpp",
     "Include": "SPI.h",
-    "Includepath": "C:\\Users\\Matej-Windows\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\SPI\\src"
+    "Includepath": "/home/nixer/.arduino15/packages/arduino/hardware/avr/1.8.6/libraries/SPI/src"
   },
   {
-    "Sourcefile": "C:\\Users\\Matej-Windows\\Documents\\Arduino\\libraries\\Adafruit_BusIO\\Adafruit_BusIO_Register.cpp",
+    "Sourcefile": "/home/nixer/Arduino/libraries/Adafruit_BusIO/Adafruit_BusIO_Register.cpp",
     "Include": "",
     "Includepath": null
   },
   {
-    "Sourcefile": "C:\\Users\\Matej-Windows\\Documents\\Arduino\\libraries\\Adafruit_BusIO\\Adafruit_I2CDevice.cpp",
+    "Sourcefile": "/home/nixer/Arduino/libraries/Adafruit_BusIO/Adafruit_I2CDevice.cpp",
     "Include": "",
     "Includepath": null
   },
   {
-    "Sourcefile": "C:\\Users\\Matej-Windows\\Documents\\Arduino\\libraries\\Adafruit_BusIO\\Adafruit_SPIDevice.cpp",
+    "Sourcefile": "/home/nixer/Arduino/libraries/Adafruit_BusIO/Adafruit_SPIDevice.cpp",
     "Include": "",
     "Includepath": null
   },
   {
-    "Sourcefile": "C:\\Users\\Matej-Windows\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src\\Wire.cpp",
+    "Sourcefile": "/home/nixer/.arduino15/packages/arduino/hardware/avr/1.8.6/libraries/Wire/src/Wire.cpp",
     "Include": "",
     "Includepath": null
   },
   {
-    "Sourcefile": "C:\\Users\\Matej-Windows\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src\\utility\\twi.c",
+    "Sourcefile": "/home/nixer/.arduino15/packages/arduino/hardware/avr/1.8.6/libraries/Wire/src/utility/twi.c",
     "Include": "",
     "Includepath": null
   },
   {
-    "Sourcefile": "C:\\Users\\Matej-Windows\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\SPI\\src\\SPI.cpp",
+    "Sourcefile": "/home/nixer/.arduino15/packages/arduino/hardware/avr/1.8.6/libraries/SPI/src/SPI.cpp",
     "Include": "",
     "Includepath": null
   }

@@ -20,12 +20,11 @@
                 "_DEBUG",
                 "UNICODE",
                 "_UNICODE"
-            ],
-            "compileCommands": "${workspaceFolder}/build/compile_commands.json"
+            ]
         },
         {
             "name": "Arduino",
-            "compilerPath": "C:\\Users\\Matej-Windows\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7\\bin\\avr-g++",
+            "compilerPath": "/home/nixer/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
             "compilerArgs": [
                 "-w",
                 "-std=gnu++11",
@@ -38,22 +37,22 @@
             ],
             "intelliSenseMode": "gcc-x64",
             "includePath": [
-                "C:\\Users\\Matej-Windows\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
-                "C:\\Users\\Matej-Windows\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\leonardo",
-                "C:\\Users\\Matej-Windows\\Documents\\Arduino\\libraries\\DallasTemperature",
-                "C:\\Users\\Matej-Windows\\Documents\\Arduino\\libraries\\OneWire",
-                "C:\\Users\\Matej-Windows\\Documents\\Arduino\\libraries\\ArduinoJson\\src",
-                "C:\\Users\\Matej-Windows\\Documents\\Arduino\\libraries\\RTClib\\src",
-                "C:\\Users\\Matej-Windows\\Documents\\Arduino\\libraries\\Adafruit_BusIO",
-                "C:\\Users\\Matej-Windows\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
-                "C:\\Users\\Matej-Windows\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\EEPROM\\src",
-                "C:\\Users\\Matej-Windows\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\SPI\\src",
-                "c:\\users\\matej-windows\\appdata\\local\\arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7\\lib\\gcc\\avr\\7.3.0\\include",
-                "c:\\users\\matej-windows\\appdata\\local\\arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7\\lib\\gcc\\avr\\7.3.0\\include-fixed",
-                "c:\\users\\matej-windows\\appdata\\local\\arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7\\avr\\include"
+                "/home/nixer/.arduino15/packages/arduino/hardware/avr/1.8.6/cores/arduino",
+                "/home/nixer/.arduino15/packages/arduino/hardware/avr/1.8.6/variants/leonardo",
+                "/home/nixer/Arduino/libraries/DallasTemperature",
+                "/home/nixer/Arduino/libraries/OneWire",
+                "/home/nixer/Arduino/libraries/ArduinoJson/src",
+                "/home/nixer/Arduino/libraries/RTClib/src",
+                "/home/nixer/Arduino/libraries/Adafruit_BusIO",
+                "/home/nixer/.arduino15/packages/arduino/hardware/avr/1.8.6/libraries/Wire/src",
+                "/home/nixer/.arduino15/packages/arduino/hardware/avr/1.8.6/libraries/EEPROM/src",
+                "/home/nixer/.arduino15/packages/arduino/hardware/avr/1.8.6/libraries/SPI/src",
+                "/home/nixer/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino7/lib/gcc/avr/7.3.0/include",
+                "/home/nixer/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino7/lib/gcc/avr/7.3.0/include-fixed",
+                "/home/nixer/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino7/avr/include"
             ],
             "forcedInclude": [
-                "C:\\Users\\Matej-Windows\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\Arduino.h"
+                "/home/nixer/.arduino15/packages/arduino/hardware/avr/1.8.6/cores/arduino/Arduino.h"
             ],
             "cStandard": "c11",
             "cppStandard": "c++11",

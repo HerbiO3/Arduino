@@ -105,10 +105,12 @@ void update_EEPROM_entities(){
 
 void setup()
 {
+  
   Serial.begin(9600);
   while(!Serial.available());
   initObjs();
   EEPROM.begin();
+  //EEPROM.update(EEPROM_ENTITIES_WRITTEN_FLAG_ADDRESS, -1);
   if(EEPROM.read(EEPROM_ENTITIES_WRITTEN_FLAG_ADDRESS) == 1){ //update only if entities were written first
     Serial.println("loading EEPROM");
     load_entities();

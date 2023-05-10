@@ -1,4 +1,4 @@
-#line 1 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\src\\Section.cpp"
+#line 1 "/home/nixer/Desktop/arduino/herbio/src/Section.cpp"
 #include "Section.hpp"
 
 extern Entity **entites;
