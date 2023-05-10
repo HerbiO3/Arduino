@@ -19,6 +19,7 @@ class Pump : public Entity {
     boolean update(JsonObject &obj);
     void dump(byte* buffer);
     void load(byte* buffer);
+    byte size();
 };
 
 #endif

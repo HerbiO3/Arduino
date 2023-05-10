@@ -20,7 +20,9 @@ byte Pump::up(){
 }
 byte Pump::down(){
   digitalWrite(pin, LOW);
-  running -= running > 0 ? 1:0; //decrement value by 1/0
+  running--;
+  if(running < 0)
+    running = 0;
   return running;
 }
 byte Pump::kill(){
@@ -37,4 +39,7 @@ void Pump::dump(byte* buffer){
 }
 void Pump::load(byte* buffer) {
   memcpy(this, buffer, sizeof(Pump));
+}
+byte Pump::size() {
+  return sizeof(Pump);
 }

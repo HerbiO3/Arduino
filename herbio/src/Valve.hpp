@@ -15,8 +15,9 @@ public:
   bool close();
 
   JsonObject toJson(JsonDocument &doc);
-   void dump(byte* buffer);
-   void load(byte* buffer);
+  void dump(byte* buffer);
+  void load(byte* buffer);
+  byte size();
 
   //boolean update(JsonObject &obj);
 };

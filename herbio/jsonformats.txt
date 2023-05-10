@@ -1,47 +1,41 @@
+-- to update
 {
-  "intervals": [
+  "id": 22,
+  "name": "section2",
+  "water_time": 90,
+  "water_until": 90,
+  "water_watered": false,
+  "water_start": 1258348527,
+  "water_next": 134023245,
+  "min_humidity": 20,
+  "mode" : "manual",
+  "water_now": true,
+  "valve_id": 11,
+  "moisture_id": 3
+}
+
+
+[
     {
-      "type": "daily",
-      "hour": 12,
-      "minute": 0,
-      "second": 0
-    },
-    {
-      "type": "weekly",
-      "day": 1,
-      "hour": 12,
-      "minute": 0,
-      "second": 0
-    },
-    {
-      "type": "monthly",
-      "day": 15,
-      "hour": 12,
-      "minute": 0,
-      "second": 0
+        "id": 22,
+        "name": "section2",
+        "water_time": 90,
+        "water_until": 736427942,
+        "water_watered": true,
+        "water_start": 3304665259,
+        "water_next": 2180339977,
+        "min_humidity": 20,
+        "water_now": true,
+        "mode": "timed",
+        "valve": {
+            "id": 11,
+            "name": "valve2",
+            "value": true
+        },
+        "moisture": {
+            "id": 3,
+            "name": "moist_A2",
+            "value": 102
+        }
     }
-  ]
-}
-
-void parseConfig(const char* config) {
-  StaticJsonDocument<256> doc; // Create a buffer to hold the JSON data
-  deserializeJson(doc, config); // Parse the JSON data
-
-  JsonArray intervals = doc["intervals"]; // Extract the intervals array
-
-  // Loop through each interval object in the array
-  for (JsonObject interval : intervals) {
-    String type = interval["type"]; // Extract the interval type
-
-    // Extract the interval details based on the type
-      if(type != "daily")
-      int day = interval["day"];
-      int hour = interval["hour"];
-      int minute = interval["minute"];
-      int second = interval["second"];
-	... nejaké settings
-  }
-}
-
-
-
+]

@@ -17,8 +17,9 @@ public:
     JsonObject toJson(JsonDocument &doc);
     boolean update(JsonObject &obj);
     Measurable* getMeasurable();
-     void dump(byte* buffer);
-     void load(byte* buffer);
+    void dump(byte* buffer);
+    void load(byte* buffer);
+    byte size();
 };
 
 #endif

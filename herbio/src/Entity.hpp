@@ -19,6 +19,7 @@ class Entity  {
 
   virtual void dump(byte* buffer)=0;
   virtual void load(byte* buffer)=0;
+  virtual byte size()=0;
 };
 Entity* getEntity(Entity* entities[], byte id);
 #endif

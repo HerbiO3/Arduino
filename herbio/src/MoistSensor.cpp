@@ -30,3 +30,6 @@ void MoistureSensor::dump(byte* buffer){
 void MoistureSensor::load(byte* buffer) {
   memcpy(this, buffer, sizeof(MoistureSensor));
 }
+byte MoistureSensor::size() {
+  return sizeof(MoistureSensor);
+}

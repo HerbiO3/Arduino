@@ -17,8 +17,9 @@ class TempSensor : public Entity, public Measurable {
     float measure();
     
     Measurable* getMeasurable();
-     void dump(byte* buffer);
-     void load(byte* buffer);
+    void dump(byte* buffer);
+    void load(byte* buffer);
+    byte size();
 
   private:
     OneWire oneWire;

@@ -35,3 +35,6 @@ void Valve::dump(byte* buffer){
 void Valve::load(byte* buffer) {
   memcpy(this, buffer, sizeof(Valve));
 }
+byte Valve::size() {
+  return sizeof(Valve);
+}

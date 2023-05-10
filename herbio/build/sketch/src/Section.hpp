@@ -8,7 +8,7 @@
 #include "RTClib.h"
 
 typedef uint32_t time_t;
-enum MODE{AUTO,TIMED,MANUAL};
+enum MODE{AUTO = 'A',TIMED = 'T',MANUAL = 'M'};
 
 class Section : public Entity {
 
@@ -22,7 +22,8 @@ public:
 
   time_t water_start;
   time_t water_next;
-  bool watered;
+  bool water_now;
+  bool _watering;
   Valve* valve;
   MoistureSensor *moisture;
   Section();
@@ -33,8 +34,9 @@ public:
  * @param current_time real time in seconds from 2000-01-01
 */
   void action(time_t current_time);
-   void dump(byte* buffer);
-   void load(byte* buffer);
+  void dump(byte* buffer);
+  void load(byte* buffer);
+  byte size();
 
 private: 
   void checkAndStopWater(time_t curr_time);

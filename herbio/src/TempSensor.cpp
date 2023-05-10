@@ -31,3 +31,6 @@ void TempSensor::dump(byte* buffer){
 void TempSensor::load(byte* buffer) {
   memcpy(this, buffer, sizeof(TempSensor));
 }
+byte TempSensor::size() {
+  return sizeof(TempSensor);
+}

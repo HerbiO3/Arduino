@@ -2,7 +2,7 @@
 
 
 Entity::Entity(byte id,const char* name){
-    delay(200);
+    delay(50);
     Serial.println(name);
     this->id = id;
     this->name = name;
@@ -11,6 +11,8 @@ Entity::Entity(byte id,const char* name){
 Entity* getEntity(Entity** entities, byte id){
   Entity* e;
   while((e = *entities)){
+    Serial.println(e->name);
+    
     if(e->id == id){
       return e;
     }
@@ -30,9 +32,6 @@ JsonObject Entity::toJson(JsonDocument& doc){
 }
 
 boolean Entity::update(JsonObject &obj) {
-  if (obj["id"] != this->id)
-    return false;
-  //strncpy(this->name, obj[name], NAME_LENGTH); //there is not enough space to allocate for name
-  return true;
+  return obj["id"] == this->id;
 };
 

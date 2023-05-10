@@ -20,9 +20,9 @@ float Tank::measure() {
   digitalWrite(trigPin, LOW);
   long duration = pulseIn(echoPin, HIGH);
   uint16_t distance = duration * 0.034f / 2;
-  float value =  (dist_empty != dist_full) ?
-                 map(distance, dist_empty, dist_full, 0, 100) // maps distance to a value in percentage
-                 : float(distance);
+  float value = float(distance);
+  if(dist_empty != dist_full)
+    value =  map(distance, dist_empty, dist_full, 0, 100); // maps distance to a value in percentage
 
   return value;
 }
@@ -54,7 +54,12 @@ Measurable* Tank::getMeasurable() {
 
 void Tank::dump(byte* buffer){
   memcpy(buffer, this, sizeof(Tank));
+
 }
 void Tank::load(byte* buffer) {
   memcpy(this, buffer, sizeof(Tank));
+
+}
+byte Tank::size() {
+  return sizeof(Tank);
 }

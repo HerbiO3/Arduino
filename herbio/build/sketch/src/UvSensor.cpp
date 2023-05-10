@@ -25,3 +25,6 @@ void UVsensor::dump(byte* buffer){
 void UVsensor::load(byte* buffer) {
   memcpy(this, buffer, sizeof(UVsensor));
 }
+byte UVsensor::size() {
+  return sizeof(UVsensor);
+}
