@@ -1,4 +1,4 @@
-#line 1 "/home/nixer/Desktop/arduino/herbio/src/Section.hpp"
+#line 1 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\src\\Section.hpp"
 #ifndef SECTION_H
 #define SECTION_H
 

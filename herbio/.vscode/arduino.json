@@ -1,6 +1,6 @@
 {
     "board": "arduino:avr:leonardo",
     "sketch": "herbio.ino",
-    "port": "/dev/ttyACM0",
+    "port": "COM5",
     "output": "./build/"
 }

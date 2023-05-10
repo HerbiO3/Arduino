@@ -11,8 +11,6 @@ Entity::Entity(byte id,const char* name){
 Entity* getEntity(Entity** entities, byte id){
   Entity* e;
   while((e = *entities)){
-    Serial.println(e->name);
-    
     if(e->id == id){
       return e;
     }

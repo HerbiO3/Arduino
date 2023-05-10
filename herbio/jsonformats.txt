@@ -1,41 +1,17 @@
--- to update
 {
-  "id": 22,
-  "name": "section2",
-  "water_time": 90,
-  "water_until": 90,
-  "water_watered": false,
-  "water_start": 1258348527,
-  "water_next": 134023245,
-  "min_humidity": 20,
-  "mode" : "manual",
-  "water_now": true,
-  "valve_id": 11,
-  "moisture_id": 3
-}
-
-
-[
-    {
-        "id": 22,
-        "name": "section2",
-        "water_time": 90,
-        "water_until": 736427942,
-        "water_watered": true,
-        "water_start": 3304665259,
-        "water_next": 2180339977,
-        "min_humidity": 20,
-        "water_now": true,
-        "mode": "timed",
-        "valve": {
-            "id": 11,
-            "name": "valve2",
-            "value": true
-        },
-        "moisture": {
-            "id": 3,
-            "name": "moist_A2",
-            "value": 102
-        }
+    "id": 22,
+    "name": "section2",
+    "water_time": 30,
+    "water_until": 74603,
+    "water_watered": false,
+    "water_start": 737078253,
+    "water_next": 737078343,
+    "min_humidity": 20,
+    "water_now": false,
+    "mode": "manual",
+    "valve": {
+        "id": 11,
+        "name": "valve1",
+        "value": true
     }
-]
+}

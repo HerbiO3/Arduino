@@ -1,4 +1,4 @@
-#line 1 "/home/nixer/Desktop/arduino/herbio/src/Tank.cpp"
+#line 1 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\src\\Tank.cpp"
 #include "Tank.hpp"
 
 Tank::Tank(byte id, const char* name, byte echoPin, byte trigPin) : Entity(id,name) {

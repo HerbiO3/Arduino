@@ -1,4 +1,4 @@
-#line 1 "/home/nixer/Desktop/arduino/herbio/src/Entity.cpp"
+#line 1 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\src\\Entity.cpp"
 #include "Entity.hpp"
 
 
@@ -12,8 +12,6 @@ Entity::Entity(byte id,const char* name){
 Entity* getEntity(Entity** entities, byte id){
   Entity* e;
   while((e = *entities)){
-    Serial.println(e->name);
-    
     if(e->id == id){
       return e;
     }

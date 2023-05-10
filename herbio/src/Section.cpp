@@ -15,8 +15,6 @@ Section::Section(byte id,const char* name, byte min_humid, time_t water_time, Va
 
 
 JsonObject Section::toJson(JsonDocument& doc) {
-  Serial.println("chck1");
-
   JsonObject json = Entity::toJson(doc);
   json["water_time"]    = this->water_time ;
   json["water_until"]   = this->water_until ;
@@ -53,8 +51,6 @@ boolean Section::update(JsonObject &obj){
 
  
   const char* new_mode = obj["mode"].as<const char*>();  // MODE EnumType.String
-  Serial.print("detected: '");
-  Serial.print(new_mode?new_mode:"null");
 
   if(! strcmp(new_mode,"auto"  ))
     this->mode = AUTO;
@@ -63,25 +59,26 @@ boolean Section::update(JsonObject &obj){
   if(! strcmp(new_mode,"manual")) 
     this->mode = MANUAL;
 
-
-  Serial.print("' assigned:");
-  Serial.println((char)(this->mode));
   if(obj.containsKey("water_now")){
     this->water_now = obj["water_now"];    
   }
   return true;
 }
 void Section::water(time_t curr_time){
+  Serial.print("---opening ");
+  Serial.println(valve->name);
   this->water_until = curr_time + water_time;
   this->valve->open();
   this->_watering = true;
-  Serial.println("zaliate");
 }
 void Section::checkAndStopWater(time_t curr_time){
   if(!_watering) return; //not started or, valve was not opened
-  if(curr_time > water_until)
+  if(curr_time > water_until){
+    Serial.print("---closing ");
+    Serial.println(valve->name);
     valve->close();
-  _watering = false;
+    _watering = false;
+  }
 }
 // a <= b <= c
 bool isBetween(time_t a,time_t b, time_t c){return a<=b && b<=c;}
@@ -125,7 +122,7 @@ void Section::action(time_t curr_time){
   if(mode == MANUAL){  // otazka na tok kodu
     Serial.print("manual: ");
     Serial.println(id);
-    Serial.print("water: ");
+    Serial.print("water_now: ");
     Serial.println(water_now);
     if(water_now){
       water(curr_time);

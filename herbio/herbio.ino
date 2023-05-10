@@ -25,7 +25,8 @@
 
 #define NAME_LEN_MAX 20
 #define EEPROM_ENTITIES_WRITTEN_FLAG_ADDRESS 0  // signal that entities were saved into memory
-#define EEPROM_ENTITIES_OFFSET 10
+#define EEPROM_ENTITIES_OFFSET 20
+#define EEPROM_RTC_OFFSET 10
 
 RTC_DS1307 rtc;
 
@@ -55,15 +56,16 @@ Entity *all_ents[17]= {0};
                                                                 //
 //==============================================================//
 
+//not called
 void initObjs(){
-  all_ents[0] = themp      = new TempSensor(8,7,"thermo"); 
-  all_ents[1] = moist0     = new MoistureSensor(0,A0,"moist_A0");
-  all_ents[2] = moist1     = new MoistureSensor(1,A1,"moist_A1");
-  all_ents[3] = moist2     = new MoistureSensor(2,A2,"moist_A2");
-  all_ents[4] = moist3     = new MoistureSensor(3,A3,"moist_A3");
-  all_ents[5] = tank       = new Tank(5,"tank",3,2); 
-  all_ents[6] = pump       = new Pump(6,4,"pump");                              
-  all_ents[7] = uvSensor   = new UVsensor(7,A4,"uv_7");
+//  all_ents[0] = themp       = new TempSensor(8,7,"thermo"); 
+  all_ents[1] = moist0      = new MoistureSensor(0,A0,"moist_A0");
+  all_ents[2] = moist1      = new MoistureSensor(1,A1,"moist_A1");
+  all_ents[3] = moist2      = new MoistureSensor(2,A2,"moist_A2");
+  all_ents[4] = moist3      = new MoistureSensor(3,A3,"moist_A3");
+  all_ents[5] = tank        = new Tank(5,"tank",3,2); 
+  all_ents[6] = pump        = new Pump(6,4,"pump");
+  all_ents[7] = uvSensor    = new UVsensor(7,A4,"uv_7");
   all_ents[8] = valve0      = new Valve(10,6,  "valve0",pump);
   all_ents[9] = valve1      = new Valve(11,8, "valve1",pump);
   all_ents[10] = valve2     = new Valve(12,9, "valve2",pump);
@@ -71,46 +73,75 @@ void initObjs(){
   all_ents[12] = section0   = new Section(20, "section0",20,90,valve0, moist0);
   all_ents[13] = section1   = new Section(21, "section1",20,90,valve1, moist1);
   all_ents[14] = section2   = new Section(22, "section2",20,90,valve2, moist2);
-  all_ents[15] = section3   = new Section(23, "section3",20,90,valve3, moist3);
+  all_ents[0] = section3    = new Section(23, "section3",20,90,valve3, moist3);
 
   section0->global_entites = all_ents;
   section1->global_entites = all_ents;
   section2->global_entites = all_ents;
   section3->global_entites = all_ents;
   pinMode(buttonPin, INPUT);
-
 }
 
 
 
 void load_entities(){
-  byte EEcursor = EEPROM_ENTITIES_OFFSET;
+  int EEcursor = EEPROM_ENTITIES_OFFSET;
   for(byte i=0; all_ents[i]!= nullptr; i++){ //iterate entities
-      byte len = all_ents[i]->size();     //get size of entity
-      for(byte ent_curr = 0; ent_curr < len; ent_curr++){ //for every byte of entity = EEPROM.read()
+      Serial.print("loading: ");
+      Serial.println(all_ents[i]->name);
+      for(byte ent_curr = 0; ent_curr < all_ents[i]->size(); ent_curr++){ //for every byte of entity = EEPROM.read()
           *(((char*)all_ents[i])+ent_curr) = EEPROM.read(EEcursor++); //copies memory into bytes of entity
       }
   }
+  EEcursor = EEPROM_RTC_OFFSET;
+  for(byte i=0; i < sizeof(rtc);i++){
+    *(((char*)(&rtc))+i) = EEPROM.read(EEcursor++);
+  }
 }
+
 void update_EEPROM_entities(){
-  byte EEcursor = EEPROM_ENTITIES_OFFSET;
+  int EEcursor = EEPROM_ENTITIES_OFFSET;
   for(int i = 0; all_ents[i]!= nullptr; i++){ //iterate entities
-    byte len = all_ents[i]->size();   //get size of entity
-    for(byte ent_curr = 0; ent_curr < len; ent_curr++){ //for every byte of entity update EEPROM
+    for(byte ent_curr = 0; ent_curr < all_ents[i]->size(); ent_curr++){ //for every byte of entity update EEPROM
       EEPROM.update(EEcursor++,*(((char*)all_ents[i])+ent_curr)); // writing value costs lifespan, .update() writes only if needed
     }
+  }
+  EEcursor = EEPROM_RTC_OFFSET;
+  for(byte i=0; i < sizeof(rtc);i++){
+      EEPROM.update(EEcursor++,*(((char*)(&rtc))+i));
   }
   EEPROM.update(EEPROM_ENTITIES_WRITTEN_FLAG_ADDRESS,1);
 }
 
+void eeprom_dump(){
+  char tmp[7];
+  for(byte i = 0; i < 20; i++){
+    for(byte j = 0; j < 50; j++){
+      sprintf(tmp,"%02hhx ",EEPROM.read(i*20+j));
+      Serial.print(tmp);
+      Serial.print(' ');
+    }
+    Serial.println();
+  }
+}
+
+void eeprom_empty(){
+  for(int i = 0; i < 1024; i++){
+      EEPROM.update(i,(byte)255);
+  }
+}
+
 void setup()
 {
-  
+  //EEPROM.update(EEPROM_ENTITIES_WRITTEN_FLAG_ADDRESS,-1);
   Serial.begin(9600);
   while(!Serial.available());
+  eeprom_dump();
   initObjs();
+  Serial.println("ok");
+  
   EEPROM.begin();
-  //EEPROM.update(EEPROM_ENTITIES_WRITTEN_FLAG_ADDRESS, -1);
+  
   if(EEPROM.read(EEPROM_ENTITIES_WRITTEN_FLAG_ADDRESS) == 1){ //update only if entities were written first
     Serial.println("loading EEPROM");
     load_entities();
@@ -129,25 +160,30 @@ void setup()
 
 
 void loop(){
+
   Serial.println("im alive");
   //sprintf(timestamp, "%02d/%02d/%02d-%02d:%02d:%02d", rtc.now().year(), rtc.now().month(), rtc.now().day(), rtc.now().hour(), rtc.now().minute(),rtc.now().second()); // format timestamp
-  Serial.println(rtc.now().timestamp());
-  checkSerial();
+  Serial.println(rtc.now().secondstime());
 
+
+
+
+  checkSerial();
   section0->action(rtc.now().secondstime());
   section1->action(rtc.now().secondstime());
   section2->action(rtc.now().secondstime());
   section3->action(rtc.now().secondstime());
 
-  delay(DEBUG*2000);
+  #ifdef DEBUG
+  delay(2000);
+  #endif
 
   if(rtc.now().secondstime() % 10){ //every 10 seconds update entities
-    update_EEPROM_entities();
+    if(EEPROM.read(EEPROM_ENTITIES_WRITTEN_FLAG_ADDRESS) == -1)
+      initObjs();
+    else update_EEPROM_entities();
   }
-
 }
-
-
 
 StaticJsonDocument<512> doc;
 void command_get_names(){ // total: 559;  po2: 768  (closest power of 2)
@@ -176,19 +212,7 @@ void _print_entity(Entity *e){
 }
 
 #define No_WORDS 10
-/*
-void command_get_entity(byte id){
-  Entity *e = getEntity(all_ents,id);
-  if(!e){
-    Serial.print("Not found id: ");
-    Serial.print(id);
-  }
-  else _print_entity(e);
-}
-*/
-bool startsWith(const char* base, const char* start){
-    return !strncmp(base,start, strlen(start));
-}
+
 byte atob(const char* str) {
   byte result = 0;
   while (*str >= '0' && *str <= '9') {
@@ -198,7 +222,7 @@ byte atob(const char* str) {
   return result;
 }
 //puts after every word \0 and do command
-byte execComand(const char* cmd){
+byte execComand(char* cmd){
   //Name begins after last controll keyword
 
   // "TOKENIZE STRING" 
@@ -207,34 +231,48 @@ byte execComand(const char* cmd){
   byte nWords = 1;
   byte len = strlen(cmd);
   words[0] = cmd;
-  for(byte i=1; i < len;i++){  
-    if(cmd[i]== ' '){
-      words[nWords++] = cmd+i+1;
+  
+  while(*cmd){
+    if(*cmd == ' '){
+      words[nWords++] = cmd+1;
+      *cmd = 0;
     }
+    cmd++;
   }
-  Serial.println("chck2");
-  if(startsWith(words[0],"get")){  // command get <NAME_OF_ENTITY> prints Json of entity to Serial.
-    if(nWords >=1 && startsWith(words[1],"all")){
-      //Serial.println("getting all entities");
+
+  if(!strcmp(words[0],"get")){  // command get <NAME_OF_ENTITY> prints Json of entity to Serial.
+    if(nWords >=1 && !strcmp(words[1],"all")){
       command_get_names();
       return true;
     }
-    else if(nWords >=1 && startsWith(words[1],"time")){
+    else if(nWords >=1 && !strcmp(words[1],"time")){
       Serial.println(rtc.now().timestamp());
+      return true;
+    }
+    else if(nWords >=1 && !strcmp(words[1],"dump")){
+      eeprom_dump();
       return true;
     }
     else if(nWords >=1){ // TREAT AS ID      
       byte id = atob(words[1]); //simple atobyte for 2digit
-      Serial.println("chck3");
-      Serial.println(id);
       _print_entity(getEntity(all_ents,id));
       return true;
-    } else {Serial.println("err");}
+    }
   }
 
-  if(strcmp(words[0],"set") ==0){
-    if(strcmp(words[1],"time") ==0){
+  if(!strcmp(words[0],"set")){
+    if(!strcmp(words[1],"time")){
       rtc.adjust(DateTime(words[2]));
+      return true;
+    }
+
+    if(!strcmp(words[1],"invalid")){
+      EEPROM.update(EEPROM_ENTITIES_WRITTEN_FLAG_ADDRESS, -1);
+      return true;
+    }
+    else if(nWords >=1 && !strcmp(words[1],"empty")){
+      eeprom_empty();
+      Serial.println("emptied");
       return true;
     }
   }
@@ -245,7 +283,6 @@ bool update_entity(){
   JsonObject incomingObj= doc.as<JsonObject>();
   //tries to update every entity, if succeeds breaks, i = last updated entity
   for(byte i = 0; all_ents[i] != nullptr; i++){
-    Serial.println(all_ents[i]->id);
     if(all_ents[i]->update(incomingObj)){
       return true;
     }
@@ -268,11 +305,9 @@ void checkSerial(){
     case DeserializationError::InvalidInput:
         char buff[100]={0};
         Serial.readBytes(buff, sizeof(buff));
-        Serial.println("chck1");
         if(execComand(buff)){
           Serial.println("ok");
         } else Serial.println("err");
-
         break;
     default:
       Serial.println("err");
