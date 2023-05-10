@@ -1,4 +1,4 @@
-#include "UVsensor.hpp"
+#include "UvSensor.hpp"
 
 UVsensor::UVsensor(byte id, byte pin, const char* name) : Entity(id,name) {
   this->pin = pin;
