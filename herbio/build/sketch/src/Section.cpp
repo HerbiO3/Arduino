@@ -1,4 +1,4 @@
-#line 1 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\src\\Section.cpp"
+#line 1 "/home/nixer/Desktop/arduino/herbio/src/Section.cpp"
 #include "Section.hpp"
 
 extern Entity **entites;
@@ -87,15 +87,15 @@ void Section::action(time_t curr_time){
   //TIME REFRESH
   if(mode == TIMED){
     // far behind
-    // lets have a section  --|water_time|--A--|water_until|-------B---------...-water_next|--C--
+    // lets have a sections  -0-|water_start|--A--|water_until|-------B---------...-water_next|--C--
     // A = watering begun on time and it is still going,
     // B = watering should end, and waiting for water_next time
     // C = period shifts (water_time=next, next=+'timeperiod'), so C becomes A
 
     // section C
-    if(! isBetween(water_start,curr_time,water_next)){
+    if( ! isBetween(water_start,curr_time,water_next)){
       time_t len = water_next - water_start;
-      int k=1;  //shift once
+      int k=0;  //shift once
       while((water_start + k * len) < curr_time) 
         k++;// find how many spans were skipped
       water_start += k*len; //shift k times

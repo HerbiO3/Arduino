@@ -1,17 +1,18 @@
+2023-05-11T12:17:22
++20 = 737122662
++90 = 737122732
+
 {
     "id": 22,
     "name": "section2",
     "water_time": 30,
-    "water_until": 74603,
+    "water_until": 737122315,
     "water_watered": false,
-    "water_start": 737078253,
-    "water_next": 737078343,
+    "water_start": 737122662,
+    "water_next": 737122732,
     "min_humidity": 20,
-    "water_now": false,
-    "mode": "manual",
-    "valve": {
-        "id": 11,
-        "name": "valve1",
-        "value": true
-    }
+    "water_now": true,
+    "mode": "timed",
+    "valve_id": 12,
+    "moisture_id": 2
 }

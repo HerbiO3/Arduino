@@ -25,8 +25,21 @@
 
 #define NAME_LEN_MAX 20
 #define EEPROM_ENTITIES_WRITTEN_FLAG_ADDRESS 0  // signal that entities were saved into memory
-#define EEPROM_ENTITIES_OFFSET 20
-#define EEPROM_RTC_OFFSET 10
+#define EEPROM_ENTITIES_OFFSET 20  //size 400B
+#define EEPROM_RTC_OFFSET 10 // size 2B
+
+#define CMD_failed 0
+#define CMD_get_all 1
+#define CMD_get_time 2
+#define CMD_get_dump 3
+#define CMD_get_id 4
+#define CMD_set_time 5
+#define CMD_set_open 6
+#define CMD_set_invalid 7
+#define CMD_set_empty 8
+#define CMD_set_num 9
+#define CMD_updateJson 100
+#define CMD_exit 10
 
 RTC_DS1307 rtc;
 
@@ -130,27 +143,35 @@ void eeprom_empty(){
       EEPROM.update(i,(byte)255);
   }
 }
-
+byte setNum;
 void setup()
 {
-  //EEPROM.update(EEPROM_ENTITIES_WRITTEN_FLAG_ADDRESS,-1);
+  EEPROM.begin();
   Serial.begin(9600);
   while(!Serial.available());
-  eeprom_dump();
+  Serial.println("hello");
+  valve0->open();
+  delay(1000);
+  valve0->close();
+
+  Serial.println("checkpoint 1");
+  while(checkSerial() != CMD_exit);
+  EEPROM.write(EEPROM_ENTITIES_WRITTEN_FLAG_ADDRESS,setNum);
+  //eeprom_dump();
   initObjs();
   Serial.println("ok");
-  
-  EEPROM.begin();
-  
+
   if(EEPROM.read(EEPROM_ENTITIES_WRITTEN_FLAG_ADDRESS) == 1){ //update only if entities were written first
     Serial.println("loading EEPROM");
     load_entities();
     Serial.println("ok");
   }
   
-  Wire.begin();
+  //Wire.begin();
   rtc.begin();
   //rtc.adjust(DateTime(__DATE__, __TIME__)); // set RTC time to compile time
+  Serial.print("checkpoint 2");
+  while(checkSerial() != CMD_exit);
 
   // setup pins
   // declare relay as output
@@ -239,41 +260,63 @@ byte execComand(char* cmd){
     }
     cmd++;
   }
+  for(byte i=0;i<nWords;i++){
+    Serial.print("'");
+    Serial.print(words[i]);
+    Serial.println("'");
+  }
+
+  if(!strcmp(words[0],"exit")){
+    return CMD_exit;
+  }
+    
 
   if(!strcmp(words[0],"get")){  // command get <NAME_OF_ENTITY> prints Json of entity to Serial.
     if(nWords >=1 && !strcmp(words[1],"all")){
       command_get_names();
-      return true;
+      return CMD_get_all;
     }
     else if(nWords >=1 && !strcmp(words[1],"time")){
       Serial.println(rtc.now().timestamp());
-      return true;
+      return CMD_get_time;
     }
     else if(nWords >=1 && !strcmp(words[1],"dump")){
       eeprom_dump();
-      return true;
+      return CMD_get_dump;
     }
     else if(nWords >=1){ // TREAT AS ID      
       byte id = atob(words[1]); //simple atobyte for 2digit
       _print_entity(getEntity(all_ents,id));
-      return true;
+      return CMD_get_id;
     }
   }
 
   if(!strcmp(words[0],"set")){
     if(!strcmp(words[1],"time")){
       rtc.adjust(DateTime(words[2]));
+      return CMD_set_time;
+    }
+    if(!strcmp(words[1],"open")){
+      Valve* v = (Valve*) getEntity(all_ents,atob(words[2]));
+      v->open();
+      return CMD_set_open;
+    }
+    if(!strcmp(words[1],"close")){
+      Valve* v = (Valve*) getEntity(all_ents,atob(words[2]));
+      v->close();
       return true;
     }
-
     if(!strcmp(words[1],"invalid")){
       EEPROM.update(EEPROM_ENTITIES_WRITTEN_FLAG_ADDRESS, -1);
-      return true;
+      return CMD_set_invalid;
     }
     else if(nWords >=1 && !strcmp(words[1],"empty")){
       eeprom_empty();
       Serial.println("emptied");
       return true;
+    }else if(nWords>= 2 &&strcmp(words[1],"num")){
+        setNum = atob(words[2]);
+        return CMD_set_num;
     }
   }
   return false;
@@ -290,27 +333,32 @@ bool update_entity(){
   return false;
 }
 
-void checkSerial(){
-  
+byte checkSerial(){
+  byte exitCode = 0;
   if (!Serial.available())
-    return;
+    return exitCode;
   doc.clear();                        // clears the document for receiving/builing a new one
   DeserializationError err = deserializeJson(doc,Serial);
   switch (err.code()) {
     case DeserializationError::Ok:
         if(update_entity()){
           Serial.println("ok");
+          exitCode = CMD_updateJson;
         }
         break;
     case DeserializationError::InvalidInput:
         char buff[100]={0};
         Serial.readBytes(buff, sizeof(buff));
-        if(execComand(buff)){
+        exitCode = execComand(buff);
+        if(exitCode){
           Serial.println("ok");
-        } else Serial.println("err");
+        } else {
+          Serial.println("err");
+        }
         break;
     default:
       Serial.println("err");
   }
+  return exitCode;
 
 }

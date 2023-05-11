@@ -1,4 +1,4 @@
-#line 1 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\src\\TempSensor.hpp"
+#line 1 "/home/nixer/Desktop/arduino/herbio/src/TempSensor.hpp"
 #ifndef TEMPERATURE_SENSOR_H
 #define TEMPERATURE_SENSOR_H
 

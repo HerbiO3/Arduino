@@ -1,4 +1,4 @@
-#line 1 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\src\\UvSensor.cpp"
+#line 1 "/home/nixer/Desktop/arduino/herbio/src/UvSensor.cpp"
 #include "UvSensor.hpp"
 
 UVsensor::UVsensor(byte id, byte pin, const char* name) : Entity(id,name) {

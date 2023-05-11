@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#line 1 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
+#line 1 "/home/nixer/Desktop/arduino/herbio/herbio.ino"
 #include <DallasTemperature.h>
 #include <ArduinoJson.h>
 //#include <OneWire.h>
@@ -27,8 +27,8 @@
 
 #define NAME_LEN_MAX 20
 #define EEPROM_ENTITIES_WRITTEN_FLAG_ADDRESS 0  // signal that entities were saved into memory
-#define EEPROM_ENTITIES_OFFSET 20
-#define EEPROM_RTC_OFFSET 10
+#define EEPROM_ENTITIES_OFFSET 20  //size 400B
+#define EEPROM_RTC_OFFSET 10 // size 2B
 
 RTC_DS1307 rtc;
 
@@ -59,33 +59,33 @@ Entity *all_ents[17]= {0};
 //==============================================================//
 
 //not called
-#line 60 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
+#line 60 "/home/nixer/Desktop/arduino/herbio/herbio.ino"
 void initObjs();
-#line 87 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
+#line 87 "/home/nixer/Desktop/arduino/herbio/herbio.ino"
 void load_entities();
-#line 102 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
+#line 102 "/home/nixer/Desktop/arduino/herbio/herbio.ino"
 void update_EEPROM_entities();
-#line 116 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
+#line 116 "/home/nixer/Desktop/arduino/herbio/herbio.ino"
 void eeprom_dump();
-#line 128 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
+#line 128 "/home/nixer/Desktop/arduino/herbio/herbio.ino"
 void eeprom_empty();
-#line 134 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
+#line 134 "/home/nixer/Desktop/arduino/herbio/herbio.ino"
 void setup();
-#line 162 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
+#line 168 "/home/nixer/Desktop/arduino/herbio/herbio.ino"
 void loop();
-#line 189 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
+#line 195 "/home/nixer/Desktop/arduino/herbio/herbio.ino"
 void command_get_names();
-#line 204 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
+#line 210 "/home/nixer/Desktop/arduino/herbio/herbio.ino"
 void _print_entity(Entity *e);
-#line 216 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
+#line 222 "/home/nixer/Desktop/arduino/herbio/herbio.ino"
 byte atob(const char* str);
-#line 225 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
+#line 231 "/home/nixer/Desktop/arduino/herbio/herbio.ino"
 byte execComand(char* cmd);
-#line 282 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
+#line 304 "/home/nixer/Desktop/arduino/herbio/herbio.ino"
 bool update_entity();
-#line 293 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
+#line 315 "/home/nixer/Desktop/arduino/herbio/herbio.ino"
 void checkSerial();
-#line 60 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
+#line 60 "/home/nixer/Desktop/arduino/herbio/herbio.ino"
 void initObjs(){
 //  all_ents[0] = themp       = new TempSensor(8,7,"thermo"); 
   all_ents[1] = moist0      = new MoistureSensor(0,A0,"moist_A0");
@@ -162,10 +162,16 @@ void eeprom_empty(){
 
 void setup()
 {
-  //EEPROM.update(EEPROM_ENTITIES_WRITTEN_FLAG_ADDRESS,-1);
   Serial.begin(9600);
   while(!Serial.available());
-  eeprom_dump();
+  Serial.println("hello");
+  valve0->open();
+  delay(2000);
+  valve0->close();
+
+
+  EEPROM.write(EEPROM_ENTITIES_WRITTEN_FLAG_ADDRESS,-1);
+  //eeprom_dump();
   initObjs();
   Serial.println("ok");
   
@@ -177,7 +183,7 @@ void setup()
     Serial.println("ok");
   }
   
-  Wire.begin();
+  //Wire.begin();
   rtc.begin();
   //rtc.adjust(DateTime(__DATE__, __TIME__)); // set RTC time to compile time
 
@@ -268,6 +274,13 @@ byte execComand(char* cmd){
     }
     cmd++;
   }
+  for(byte i=0;i<nWords;i++){
+    Serial.print("'");
+    Serial.print(words[i]);
+    Serial.println("'");
+  }
+
+
 
   if(!strcmp(words[0],"get")){  // command get <NAME_OF_ENTITY> prints Json of entity to Serial.
     if(nWords >=1 && !strcmp(words[1],"all")){
@@ -294,7 +307,16 @@ byte execComand(char* cmd){
       rtc.adjust(DateTime(words[2]));
       return true;
     }
-
+    if(!strcmp(words[1],"open")){
+      Valve* v = (Valve*) getEntity(all_ents,atob(words[2]));
+      v->open();
+      return true;
+    }
+    if(!strcmp(words[1],"close")){
+      Valve* v = (Valve*) getEntity(all_ents,atob(words[2]));
+      v->close();
+      return true;
+    }
     if(!strcmp(words[1],"invalid")){
       EEPROM.update(EEPROM_ENTITIES_WRITTEN_FLAG_ADDRESS, -1);
       return true;

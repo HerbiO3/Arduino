@@ -1,10 +1,10 @@
-# 1 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino"
-# 2 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino" 2
-# 3 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino" 2
+# 1 "/home/nixer/Desktop/arduino/herbio/herbio.ino"
+# 2 "/home/nixer/Desktop/arduino/herbio/herbio.ino" 2
+# 3 "/home/nixer/Desktop/arduino/herbio/herbio.ino" 2
 //#include <OneWire.h>
 //#include <Wire.h>
-# 6 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino" 2
-# 7 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino" 2
+# 6 "/home/nixer/Desktop/arduino/herbio/herbio.ino" 2
+# 7 "/home/nixer/Desktop/arduino/herbio/herbio.ino" 2
 
 
 //#include <Arduino.h>
@@ -13,15 +13,15 @@
 
 
 //======Custom objects=============//
-# 16 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino" 2
+# 16 "/home/nixer/Desktop/arduino/herbio/herbio.ino" 2
 
-# 18 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino" 2
-# 19 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino" 2
-# 20 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino" 2
-# 21 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino" 2
-# 22 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino" 2
-# 23 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino" 2
-# 24 "C:\\Users\\Matej-Windows\\Desktop\\sem8\\TP2\\arduino\\herbio\\herbio.ino" 2
+# 18 "/home/nixer/Desktop/arduino/herbio/herbio.ino" 2
+# 19 "/home/nixer/Desktop/arduino/herbio/herbio.ino" 2
+# 20 "/home/nixer/Desktop/arduino/herbio/herbio.ino" 2
+# 21 "/home/nixer/Desktop/arduino/herbio/herbio.ino" 2
+# 22 "/home/nixer/Desktop/arduino/herbio/herbio.ino" 2
+# 23 "/home/nixer/Desktop/arduino/herbio/herbio.ino" 2
+# 24 "/home/nixer/Desktop/arduino/herbio/herbio.ino" 2
 //=================================//
 
 
@@ -86,7 +86,7 @@ void initObjs(){
 
 
 void load_entities(){
-  int EEcursor = 20;
+  int EEcursor = 20 /*size 400B*/;
   for(byte i=0; all_ents[i]!= nullptr; i++){ //iterate entities
       Serial.print("loading: ");
       Serial.println(all_ents[i]->name);
@@ -94,20 +94,20 @@ void load_entities(){
           *(((char*)all_ents[i])+ent_curr) = EEPROM.read(EEcursor++); //copies memory into bytes of entity
       }
   }
-  EEcursor = 10;
+  EEcursor = 10 /* size 2B*/;
   for(byte i=0; i < sizeof(rtc);i++){
     *(((char*)(&rtc))+i) = EEPROM.read(EEcursor++);
   }
 }
 
 void update_EEPROM_entities(){
-  int EEcursor = 20;
+  int EEcursor = 20 /*size 400B*/;
   for(int i = 0; all_ents[i]!= nullptr; i++){ //iterate entities
     for(byte ent_curr = 0; ent_curr < all_ents[i]->size(); ent_curr++){ //for every byte of entity update EEPROM
       EEPROM.update(EEcursor++,*(((char*)all_ents[i])+ent_curr)); // writing value costs lifespan, .update() writes only if needed
     }
   }
-  EEcursor = 10;
+  EEcursor = 10 /* size 2B*/;
   for(byte i=0; i < sizeof(rtc);i++){
       EEPROM.update(EEcursor++,*(((char*)(&rtc))+i));
   }
@@ -134,10 +134,16 @@ void eeprom_empty(){
 
 void setup()
 {
-  //EEPROM.update(EEPROM_ENTITIES_WRITTEN_FLAG_ADDRESS,-1);
   Serial.begin(9600);
   while(!Serial.available());
-  eeprom_dump();
+  Serial.println("hello");
+  valve0->open();
+  delay(2000);
+  valve0->close();
+
+
+  EEPROM.write(0 /* signal that entities were saved into memory*/,-1);
+  //eeprom_dump();
   initObjs();
   Serial.println("ok");
 
@@ -149,7 +155,7 @@ void setup()
     Serial.println("ok");
   }
 
-  Wire.begin();
+  //Wire.begin();
   rtc.begin();
   //rtc.adjust(DateTime(__DATE__, __TIME__)); // set RTC time to compile time
 
@@ -240,6 +246,13 @@ byte execComand(char* cmd){
     }
     cmd++;
   }
+  for(byte i=0;i<nWords;i++){
+    Serial.print("'");
+    Serial.print(words[i]);
+    Serial.println("'");
+  }
+
+
 
   if(!strcmp(words[0],"get")){ // command get <NAME_OF_ENTITY> prints Json of entity to Serial.
     if(nWords >=1 && !strcmp(words[1],"all")){
@@ -266,7 +279,16 @@ byte execComand(char* cmd){
       rtc.adjust(DateTime(words[2]));
       return true;
     }
-
+    if(!strcmp(words[1],"open")){
+      Valve* v = (Valve*) getEntity(all_ents,atob(words[2]));
+      v->open();
+      return true;
+    }
+    if(!strcmp(words[1],"close")){
+      Valve* v = (Valve*) getEntity(all_ents,atob(words[2]));
+      v->close();
+      return true;
+    }
     if(!strcmp(words[1],"invalid")){
       EEPROM.update(0 /* signal that entities were saved into memory*/, -1);
       return true;
