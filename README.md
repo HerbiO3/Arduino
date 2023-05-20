@@ -1,49 +1,53 @@
 # Herbio - Ardiono design sheet
 
-
-
-
 Scheme of wiring
 ![Scheme of wiring](model.png)
 
-
-# Code
-Code is writen with in PlatformIO envirnoment for future possible support.
-
-Code Structure is separated into 2 files:    
->### [main.cpp](src/main.c++)
-> contains main setup() and loop().    
-> Main logic is handeled:    
-> * Serial communication (requests/commands),    
-> * timers.   
-> 
-> Object initialization is done in global scope using specified constructor. Most constructors follow the > rule: 
-> ```c++
-> (uint8_t id, uint8_t pin, /* pin2,*/ char* name,  ..other)
-> //In case of HC-SR04 *pin2* is also required.
-> ```
->Serial com. Commands:   
->*implemented:*   
->`command get <id>` - return Json of entity by ID    
->`command get -all` - list of all entities just {ID,NAME} for full report call `command >get <i>` one by one        
->*to be implemented:*   
->`command set time <epoch or whatever idk yet>` updates internal RTC module to specific > time    
->if Serial input starts with `{` following this message is parsed as Json.
->USE `{` to update entity determined by ID. updated are just specific variables such as: >`name`, `treshholds-limits`, `active state`. 
+# Projekt
 
 
 
->### [classes.h](src/classes.h)    
->contains definitions and implementation of actors in the project. Two abstract classes ***Entity*** and ***Measurable*** specify certain object what funcions are implemented.    
-> ***Entity*** has:   
-> ```c++
-> class Entity  {
->   byte id;          //id
->   String name;      //human readable name
->   virtual JsonObject  toJson(JsonDocument &doc) = 0;  // appends self-Json representation to &doc 
->   virtual boolean     update(JsonObject &doc) = 0; // update self IF id matches
->   };
-> ```
-> ***Measurable*** implements just:  *`float`* `measure*(),`
+# Json aktualizácie
 
+
+
+## CLI (Command Line Interface)
+
+CLI (Command Line Interface) je v projekte Herbio použité na zjednodušenie a efektívnejšiu kontrolu nad zavlažovacím systémom. Umožňuje priamy prístup k špecifickým entitám v systéme a ich nastaveniam. Nižšie sú popísané jednotlivé príkazy a ich použitie.
+
+### Príkazy
+
+**Každý príkaz sa začína znakom `/`
+`/exit` - Ukončuje príkazovú slučku pre ladenie. (Musí byť kompilácia s `#define DEBUG`)
+
+### `/get`
+
+> Používa sa na získanie informácií o špecifických entitách alebo celkových informácií o systéme.
+
+**Options**
+
+`<id>`    - Vypíše informácie o entite s daným ID.
+`all`  - Vypíše informácie o všetkých entitách.
+`time`  - Vypíše aktuálny čas.
+`dump`  - Vypíše dump obsahu EEPROM.
+
+*Examples*
+`/get all`, `/get 21`, `/get time`, `/get dump ` ...
+
+### `/set`
+
+> Používa sa na nastavenie hodnôt entít v systéme.
+>
+
+**Options**
+
+`time <TimeStampISO8601>` - Nastaví čas systému. Formát: `/set time YYYY-MM-DDThh:mm:ss`
+`open <id>` - Otvorí ventil s daným ID. Formát: `/set open ID`
+`close <id>` - Zavrie ventil s daným ID. Formát: `/set close ID`
+`invalid` - Nastaví flag na neplatné v EEPROM pamäti.
+`empty`    - Vyprázdni EEPROM pamäť.
+`num <byte>`  - Nastaví hodnotu premennej setNum. Formát: `/set num VALUE`
+`dump`  - Uloží súčasný stav entít do EEPROM.
+Použitie
+`/set time `, `/set open 11`, `/set close 11`, `/set invalid ` ...
 

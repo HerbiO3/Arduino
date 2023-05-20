@@ -1,4 +1,5 @@
 {
     "board": "arduino:avr:leonardo",
-    "sketch": "herbio/herbio.ino"
+    "sketch": "herbio/herbio.ino",
+    "port": "COM5"
 }

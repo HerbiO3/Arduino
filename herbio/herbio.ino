@@ -5,7 +5,13 @@
 #include "RTClib.h"
 #include <EEPROM.h>
 
-#define DEBUG 1
+
+// ifdefs debug options
+ //#define DEBUG
+ //#define DEBUG_WATCHDOG
+ #define DEBUG_EEPROM
+
+
 //#include <Arduino.h>
 //#include <Thread.h>
 //#include <StaticThreadController.h>
@@ -27,6 +33,7 @@
 #define EEPROM_ENTITIES_WRITTEN_FLAG_ADDRESS 0  // signal that entities were saved into memory
 #define EEPROM_ENTITIES_OFFSET 20  //size 400B
 #define EEPROM_RTC_OFFSET 10 // size 2B
+#define No_WORDS 10
 
 #define CMD_failed 0
 #define CMD_get_all 1
@@ -35,11 +42,15 @@
 #define CMD_get_id 4
 #define CMD_set_time 5
 #define CMD_set_open 6
+#define CMD_set_close 6
 #define CMD_set_invalid 7
 #define CMD_set_empty 8
 #define CMD_set_num 9
-#define CMD_updateJson 100
-#define CMD_exit 10
+#define CMD_set_dump 10
+#define CMD_set_from_init 11
+#define CMD_set_from_eeprom 12
+#define CMD_updateJson 13
+#define CMD_exit 99
 
 RTC_DS1307 rtc;
 
@@ -65,29 +76,32 @@ Section* section2     ;
 Section* section3     ;
 byte buttonPin = 12   ;       
                                      //
-Entity *all_ents[17]= {0};
+#define ENITIES 17
+Entity *all_ents[ENITIES]= {0};
                                                                 //
 //==============================================================//
-
 //not called
 void initObjs(){
+  byte i =0;
 //  all_ents[0] = themp       = new TempSensor(8,7,"thermo"); 
-  all_ents[1] = moist0      = new MoistureSensor(0,A0,"moist_A0");
-  all_ents[2] = moist1      = new MoistureSensor(1,A1,"moist_A1");
-  all_ents[3] = moist2      = new MoistureSensor(2,A2,"moist_A2");
-  all_ents[4] = moist3      = new MoistureSensor(3,A3,"moist_A3");
-  all_ents[5] = tank        = new Tank(5,"tank",3,2); 
-  all_ents[6] = pump        = new Pump(6,4,"pump");
-  all_ents[7] = uvSensor    = new UVsensor(7,A4,"uv_7");
-  all_ents[8] = valve0      = new Valve(10,6,  "valve0",pump);
-  all_ents[9] = valve1      = new Valve(11,8, "valve1",pump);
-  all_ents[10] = valve2     = new Valve(12,9, "valve2",pump);
-  all_ents[11] = valve3     = new Valve(13,10,"valve3",pump);
-  all_ents[12] = section0   = new Section(20, "section0",20,90,valve0, moist0);
-  all_ents[13] = section1   = new Section(21, "section1",20,90,valve1, moist1);
-  all_ents[14] = section2   = new Section(22, "section2",20,90,valve2, moist2);
-  all_ents[0] = section3    = new Section(23, "section3",20,90,valve3, moist3);
-
+  all_ents[i++] = moist0     = new MoistureSensor(0,A0,"moist_A0");
+  all_ents[i++] = moist1     = new MoistureSensor(1,A1,"moist_A1");
+  all_ents[i++] = moist2     = new MoistureSensor(2,A2,"moist_A2");
+  all_ents[i++] = moist3     = new MoistureSensor(3,A3,"moist_A3");
+  all_ents[i++] = tank       = new Tank(5,"tank",3,2); 
+  all_ents[i++] = pump       = new Pump(6,4,"pump");
+  all_ents[i++] = uvSensor   = new UVsensor(7,A4,"uv_7");
+  all_ents[i++] = valve0     = new Valve(10,6,  "valve0",pump);
+  all_ents[i++] = valve1     = new Valve(11,8, "valve1",pump);
+  all_ents[i++] = valve2     = new Valve(12,9, "valve2",pump);
+  all_ents[i++] = valve3     = new Valve(13,10,"valve3",pump);
+  all_ents[i++] = section0   = new Section(20, "section0",20,90,valve0->id, moist0->id);
+  all_ents[i++] = section1   = new Section(21, "section1",20,90,valve1->id, moist1->id);
+  all_ents[i++] = section2   = new Section(22, "section2",20,90,valve2->id, moist2->id);
+  all_ents[i++] = section3   = new Section(23, "section3",20,90,valve3->id, moist3->id);
+  #ifdef DEBUG 
+    Serial.println("objects initialized");
+  #endif
   section0->global_entites = all_ents;
   section1->global_entites = all_ents;
   section2->global_entites = all_ents;
@@ -100,11 +114,22 @@ void initObjs(){
 void load_entities(){
   int EEcursor = EEPROM_ENTITIES_OFFSET;
   for(byte i=0; all_ents[i]!= nullptr; i++){ //iterate entities
-      Serial.print("loading: ");
-      Serial.println(all_ents[i]->name);
-      for(byte ent_curr = 0; ent_curr < all_ents[i]->size(); ent_curr++){ //for every byte of entity = EEPROM.read()
-          *(((char*)all_ents[i])+ent_curr) = EEPROM.read(EEcursor++); //copies memory into bytes of entity
+      byte buff[sizeof(Section)+4];
+      #ifdef DEBUG_EEPROM
+        Serial.print("loading: ");
+        Serial.print(all_ents[i]->name);
+        Serial.print("  size: ");
+        Serial.print(all_ents[i]->size());
+        Serial.print("  ");
+      #endif
+      char tmp[4];
+      for(byte j = 0; j < all_ents[i]->size(); j++){ //for every byte of entity = EEPROM.read()
+          buff[j] = EEPROM.read(EEcursor++); //copies memory into bytes of entity
+          sprintf(tmp,"%02hhx ",buff[j]);
+          Serial.print(tmp);
       }
+      Serial.println();
+      all_ents[i]->load(buff);
   }
   EEcursor = EEPROM_RTC_OFFSET;
   for(byte i=0; i < sizeof(rtc);i++){
@@ -112,13 +137,48 @@ void load_entities(){
   }
 }
 
-void update_EEPROM_entities(){
+void dump_EEPROM_entities(){
   int EEcursor = EEPROM_ENTITIES_OFFSET;
+    #ifdef DEBUG_EEPROM
+      Serial.print("all_ents[i]!= nullptr   ");
+      Serial.println(all_ents[0]!= nullptr);
+    #endif
   for(int i = 0; all_ents[i]!= nullptr; i++){ //iterate entities
-    for(byte ent_curr = 0; ent_curr < all_ents[i]->size(); ent_curr++){ //for every byte of entity update EEPROM
-      EEPROM.update(EEcursor++,*(((char*)all_ents[i])+ent_curr)); // writing value costs lifespan, .update() writes only if needed
+    #ifdef DEBUG_EEPROM
+      Serial.print("dumping: ");
+      Serial.println(all_ents[i]->name);
+    #endif
+
+    byte buff[sizeof(Section)+4];
+    byte s = all_ents[i]->dump(buff);
+
+    #ifdef DEBUG_EEPROM
+      Serial.print(s);
+      Serial.print(" Bytes dumped: ");
+      char tmp[10];
+      for(byte j = 0; j < s; j++){
+        sprintf(tmp,"%02hhx ",buff[j]);
+        Serial.print(tmp);
+      }
+      Serial.println();
+
+      Serial.print(s);
+      Serial.println(" bytes writing");
+    #endif
+
+    for(byte j = 0; j < s ; j++){ //for every byte of entity update EEPROM
+      EEPROM.update(EEcursor++,buff[j]); // writing value costs lifespan, .update() writes only if needed
+      #ifdef DEBUG_EEPROM
+        sprintf(tmp, "{%2hhx: %2hhx}\n",EEcursor-1,buff[j]);
+        Serial.print(tmp);
+      #endif
     }
+    #ifdef DEBUG_EEPROM
+      Serial.println();
+    #endif
+
   }
+  Serial.println();
   EEcursor = EEPROM_RTC_OFFSET;
   for(byte i=0; i < sizeof(rtc);i++){
       EEPROM.update(EEcursor++,*(((char*)(&rtc))+i));
@@ -128,11 +188,11 @@ void update_EEPROM_entities(){
 
 void eeprom_dump(){
   char tmp[7];
+  int cursor = 0;
   for(byte i = 0; i < 20; i++){
     for(byte j = 0; j < 50; j++){
-      sprintf(tmp,"%02hhx ",EEPROM.read(i*20+j));
+      sprintf(tmp,"%02hhx ",EEPROM.read(cursor++));
       Serial.print(tmp);
-      Serial.print(' ');
     }
     Serial.println();
   }
@@ -149,61 +209,56 @@ void setup()
   EEPROM.begin();
   Serial.begin(9600);
   while(!Serial.available());
-  Serial.println("hello");
-  valve0->open();
-  delay(1000);
-  valve0->close();
-
-  Serial.println("checkpoint 1");
-  while(checkSerial() != CMD_exit);
-  EEPROM.write(EEPROM_ENTITIES_WRITTEN_FLAG_ADDRESS,setNum);
-  //eeprom_dump();
+  #ifdef DEBUG
+    Serial.println("hello");
+    valve0->open();
+    delay(1000);
+    valve0->close();
+    Serial.println("pre init commands:");
+    while(checkSerial() != CMD_exit);
+  #endif
   initObjs();
-  Serial.println("ok");
 
   if(EEPROM.read(EEPROM_ENTITIES_WRITTEN_FLAG_ADDRESS) == 1){ //update only if entities were written first
     Serial.println("loading EEPROM");
     load_entities();
     Serial.println("ok");
   }
-  
-  //Wire.begin();
   rtc.begin();
-  //rtc.adjust(DateTime(__DATE__, __TIME__)); // set RTC time to compile time
-  Serial.print("checkpoint 2");
-  while(checkSerial() != CMD_exit);
+
+  #ifdef DEBUG
+    Serial.print("post init commands:");
+    while(checkSerial() != CMD_exit);
+  #endif
 
   // setup pins
   // declare relay as output
   // declare switch as input
   
 }
-
-
+#define CURRTIME (rtc.now().secondstime())
 void loop(){
-
-  Serial.println("im alive");
-  //sprintf(timestamp, "%02d/%02d/%02d-%02d:%02d:%02d", rtc.now().year(), rtc.now().month(), rtc.now().day(), rtc.now().hour(), rtc.now().minute(),rtc.now().second()); // format timestamp
-  Serial.println(rtc.now().secondstime());
-
-
-
-
-  checkSerial();
-  section0->action(rtc.now().secondstime());
-  section1->action(rtc.now().secondstime());
-  section2->action(rtc.now().secondstime());
-  section3->action(rtc.now().secondstime());
-
   #ifdef DEBUG
-  delay(2000);
+    delay(2000);
+    Serial.println("im alive");
+    //sprintf(timestamp, "%02d/%02d/%02d-%02d:%02d:%02d", rtc.now().year(), rtc.now().month(), rtc.now().day(), rtc.now().hour(), rtc.now().minute(),rtc.now().second()); // format timestamp
+    Serial.println(rtc.now().secondstime());
   #endif
 
-  if(rtc.now().secondstime() % 10){ //every 10 seconds update entities
-    if(EEPROM.read(EEPROM_ENTITIES_WRITTEN_FLAG_ADDRESS) == -1)
-      initObjs();
-    else update_EEPROM_entities();
+  checkSerial();
+  section0->action(CURRTIME);
+  section1->action(CURRTIME);
+  section2->action(CURRTIME);
+  section3->action(CURRTIME);
+
+
+  if(CURRTIME % 3600){ //every hour save time
+    int EEcursor = EEPROM_RTC_OFFSET;
+    for(byte i=0; i < sizeof(rtc);i++){
+        EEPROM.update(EEcursor++,*(((char*)(&rtc))+i));
+    }
   }
+
 }
 
 StaticJsonDocument<512> doc;
@@ -232,7 +287,6 @@ void _print_entity(Entity *e){
   Serial.println();
 }
 
-#define No_WORDS 10
 
 byte atob(const char* str) {
   byte result = 0;
@@ -304,7 +358,7 @@ byte execComand(char* cmd){
     if(!strcmp(words[1],"close")){
       Valve* v = (Valve*) getEntity(all_ents,atob(words[2]));
       v->close();
-      return true;
+      return CMD_set_close;
     }
     if(!strcmp(words[1],"invalid")){
       EEPROM.update(EEPROM_ENTITIES_WRITTEN_FLAG_ADDRESS, -1);
@@ -314,9 +368,26 @@ byte execComand(char* cmd){
       eeprom_empty();
       Serial.println("emptied");
       return true;
-    }else if(nWords>= 2 &&strcmp(words[1],"num")){
+    }else if(nWords>= 2 &&!strcmp(words[1],"num")){
         setNum = atob(words[2]);
         return CMD_set_num;
+    }
+    else if(nWords>= 2 &&!strcmp(words[1],"dump")){
+        dump_EEPROM_entities();
+        return CMD_set_dump;
+    } else if(nWords>= 3 &&!strcmp(words[1],"from")){
+        if(nWords>= 3 &&!strcmp(words[2],"eeprom")){
+          load_entities();
+          return CMD_set_from_eeprom;
+        }
+        if(nWords>= 3 &&!strcmp(words[2],"init")){
+          //free first
+          for (int i = 0; i < ENITIES; i++)
+            delete all_ents[i];
+          
+          initObjs();
+          return CMD_set_from_eeprom;
+        }
     }
   }
   return false;
@@ -330,6 +401,7 @@ bool update_entity(){
       return true;
     }
   }
+  dump_EEPROM_entities();
   return false;
 }
 
@@ -351,7 +423,9 @@ byte checkSerial(){
         Serial.readBytes(buff, sizeof(buff));
         exitCode = execComand(buff);
         if(exitCode){
-          Serial.println("ok");
+          Serial.print("ok");
+          Serial.print(' ');
+          Serial.println(exitCode);
         } else {
           Serial.println("err");
         }

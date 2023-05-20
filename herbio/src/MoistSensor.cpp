@@ -24,8 +24,9 @@ float MoistureSensor::measure() {
 Measurable* MoistureSensor::getMeasurable() {
   return this;
 }
-void MoistureSensor::dump(byte* buffer){
+byte MoistureSensor::dump(byte* buffer){
   memcpy(buffer, this, sizeof(MoistureSensor));
+  return sizeof(MoistureSensor);
 }
 void MoistureSensor::load(byte* buffer) {
   memcpy(this, buffer, sizeof(MoistureSensor));

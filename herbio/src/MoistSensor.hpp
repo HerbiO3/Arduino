@@ -17,7 +17,7 @@ class MoistureSensor : public Entity, public Measurable {
     JsonObject toJson(JsonDocument &doc) ;
     float measure();
     Measurable* getMeasurable();
-    void dump(byte* buffer);
+    byte dump(byte* buffer);
     void load(byte* buffer);
     byte size();
 };

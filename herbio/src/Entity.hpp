@@ -17,8 +17,8 @@ class Entity  {
   virtual boolean update(JsonObject &obj);
   void eToJson(JsonObject &json);
 
-  virtual void dump(byte* buffer)=0;
-  virtual void load(byte* buffer)=0;
+  virtual byte dump(byte* buffer)=0; // fills the buffer and return written size
+  virtual void load(byte* buffer)=0; // loads from buffer of size of entity (* dumping size)
   virtual byte size()=0;
 };
 Entity* getEntity(Entity* entities[], byte id);

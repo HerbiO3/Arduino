@@ -2,8 +2,10 @@
 
 
 Entity::Entity(byte id,const char* name){
+  //#ifdef DEBUG
     delay(50);
     Serial.println(name);
+  //#endif
     this->id = id;
     this->name = name;
 };

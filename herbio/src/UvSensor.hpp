@@ -16,7 +16,7 @@ class UVsensor : public Entity, public Measurable {
     JsonObject toJson(JsonDocument &doc);
     //boolean update(JsonObject &obj);
     Measurable* getMeasurable();
-    void dump(byte* buffer);
+    byte dump(byte* buffer);
     void load(byte* buffer);
     byte size();
 

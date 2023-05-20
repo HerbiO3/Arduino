@@ -100,7 +100,7 @@ void load_entities(){
   }
 }
 
-void update_EEPROM_entities(){
+void dump_EEPROM_entities(){
   int EEcursor = 20 /*size 400B*/;
   for(int i = 0; all_ents[i]!= nullptr; i++){ //iterate entities
     for(byte ent_curr = 0; ent_curr < all_ents[i]->size(); ent_curr++){ //for every byte of entity update EEPROM
@@ -188,7 +188,7 @@ void loop(){
   if(rtc.now().secondstime() % 10){ //every 10 seconds update entities
     if(EEPROM.read(0 /* signal that entities were saved into memory*/) == -1)
       initObjs();
-    else update_EEPROM_entities();
+    else dump_EEPROM_entities();
   }
 }
 

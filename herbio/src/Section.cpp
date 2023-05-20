@@ -5,12 +5,14 @@ extern time_t curr_time;
 
 Section::Section() {}
 
-Section::Section(byte id,const char* name, byte min_humid, time_t water_time, Valve *valve, MoistureSensor *moisture) : Entity(id,name){
+
+Section::Section(byte id,const char* name, byte min_humid, time_t water_time, byte valve_id, byte moist_id) : Entity(id,name){
   this->min_humid  = min_humid;
   this->water_time = water_time;
-  this->valve = valve;
-  this->moisture = moisture;
   this->water_now = 0;
+
+  this->valve     = (Valve*)          getEntity(global_entites,valve_id);
+  this->moisture  = (MoistureSensor*) getEntity(global_entites,moist_id);
 }
 
 
@@ -132,12 +134,18 @@ void Section::action(time_t curr_time){
   }
 }
 
-void Section::dump(byte* buffer){
+byte Section::dump(byte* buffer){
   memcpy(buffer, this, sizeof(Section));
+  buffer[offsetof(Section,valve)] = valve->id;
+  buffer[offsetof(Section,moisture)] = moisture->id;
+  return sizeof(Section);
 }
 void Section::load(byte* buffer) {
   memcpy(this, buffer, sizeof(Section));
+  valve = (Valve*) getEntity(global_entites,buffer[offsetof(Section,valve)]);
+  moisture = (MoistureSensor*) getEntity(global_entites,buffer[offsetof(Section,moisture)]);
 }
+
 byte Section::size() {
   return sizeof(Section);
 }

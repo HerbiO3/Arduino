@@ -64,7 +64,7 @@ void initObjs();
 #line 87 "/home/nixer/Desktop/arduino/herbio/herbio.ino"
 void load_entities();
 #line 102 "/home/nixer/Desktop/arduino/herbio/herbio.ino"
-void update_EEPROM_entities();
+void dump_EEPROM_entities();
 #line 116 "/home/nixer/Desktop/arduino/herbio/herbio.ino"
 void eeprom_dump();
 #line 128 "/home/nixer/Desktop/arduino/herbio/herbio.ino"
@@ -128,7 +128,7 @@ void load_entities(){
   }
 }
 
-void update_EEPROM_entities(){
+void dump_EEPROM_entities(){
   int EEcursor = EEPROM_ENTITIES_OFFSET;
   for(int i = 0; all_ents[i]!= nullptr; i++){ //iterate entities
     for(byte ent_curr = 0; ent_curr < all_ents[i]->size(); ent_curr++){ //for every byte of entity update EEPROM
@@ -216,7 +216,7 @@ void loop(){
   if(rtc.now().secondstime() % 10){ //every 10 seconds update entities
     if(EEPROM.read(EEPROM_ENTITIES_WRITTEN_FLAG_ADDRESS) == -1)
       initObjs();
-    else update_EEPROM_entities();
+    else dump_EEPROM_entities();
   }
 }
 

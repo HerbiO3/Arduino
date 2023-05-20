@@ -17,12 +17,14 @@ JsonObject Pump::toJson(JsonDocument &doc) {
 byte Pump::up(){
   digitalWrite(pin, HIGH);
   running++;
+  return running;
 }
 byte Pump::down(){
-  digitalWrite(pin, LOW);
-  running--;
-  if(running < 0)
-    running = 0;
+  if(running > 0){
+    running--;
+  }
+  if(running==0)
+    digitalWrite(pin, LOW);
   return running;
 }
 byte Pump::kill(){
@@ -34,11 +36,13 @@ byte Pump::kill(){
 boolean Pump::update(JsonObject &obj){
   return false;
 }
-void Pump::dump(byte* buffer){
+byte Pump::dump(byte* buffer){
   memcpy(buffer, this, sizeof(Pump));
+  return sizeof(Pump);
 }
 void Pump::load(byte* buffer) {
   memcpy(this, buffer, sizeof(Pump));
+  running = 0;
 }
 byte Pump::size() {
   return sizeof(Pump);

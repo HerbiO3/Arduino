@@ -25,8 +25,9 @@ Measurable* TempSensor::getMeasurable() {
   return this;
 }
 
-void TempSensor::dump(byte* buffer){
+byte TempSensor::dump(byte* buffer){
   memcpy(buffer, this, sizeof(TempSensor));
+  return sizeof(TempSensor);
 }
 void TempSensor::load(byte* buffer) {
   memcpy(this, buffer, sizeof(TempSensor));

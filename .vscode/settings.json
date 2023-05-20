@@ -2,6 +2,7 @@
     "C_Cpp.errorSquiggles": "enabled",
     "files.associations": {
         "cstddef": "cpp",
-        "thread": "cpp"
+        "thread": "cpp",
+        "valarray": "cpp"
     }
 }

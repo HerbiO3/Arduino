@@ -26,14 +26,14 @@ public:
   Valve* valve;
   MoistureSensor *moisture;
   Section();
-  Section(byte id, const char* name, byte min_humid, time_t water_time, Valve *valve, MoistureSensor *moisture);
+  Section(byte id, const char* name, byte min_humid, time_t water_time, byte valve_id, byte moist_id);
   JsonObject toJson(JsonDocument &doc);
   boolean update(JsonObject &obj);
 /**
  * @param current_time real time in seconds from 2000-01-01
 */
   void action(time_t current_time);
-  void dump(byte* buffer);
+  byte dump(byte* buffer);
   void load(byte* buffer);
   byte size();
 

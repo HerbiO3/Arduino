@@ -52,8 +52,9 @@ Measurable* Tank::getMeasurable() {
 }
 
 
-void Tank::dump(byte* buffer){
+byte Tank::dump(byte* buffer){
   memcpy(buffer, this, sizeof(Tank));
+  return sizeof(Tank);
 
 }
 void Tank::load(byte* buffer) {
