@@ -7,9 +7,9 @@
 
 
 // ifdefs debug options
- //#define DEBUG
- //#define DEBUG_WATCHDOG
- #define DEBUG_EEPROM
+//#define DEBUG
+//#define DEBUG_WATCHDOG
+//#define DEBUG_EEPROM
 
 
 //#include <Arduino.h>
@@ -18,15 +18,15 @@
 
 
 //======Custom objects=============//
-#include "src/Entity.hpp"      //
-#include "src/Measurable.hpp"  //
-#include "src/MoistSensor.hpp" //
-#include "src/Pump.hpp"        //
-#include "src/Section.hpp"     //
-#include "src/Tank.hpp"        //
-#include "src/TempSensor.hpp"  //
-#include "src/UvSensor.hpp"    //
-#include "src/Valve.hpp"       //
+#include "src/Entity.hpp"          //
+#include "src/Measurable.hpp"      //
+#include "src/MoistSensor.hpp"     //
+#include "src/Pump.hpp"            //
+#include "src/Section.hpp"         //
+#include "src/Tank.hpp"            //
+#include "src/TempSensor.hpp"      //
+#include "src/UvSensor.hpp"        //
+#include "src/Valve.hpp"           //
 //=================================//
 
 #define NAME_LEN_MAX 20
@@ -209,6 +209,8 @@ void setup()
   EEPROM.begin();
   Serial.begin(9600);
   while(!Serial.available());
+  Serial.print("version: ");
+  Serial.println(101);
   #ifdef DEBUG
     Serial.println("hello");
     valve0->open();
@@ -252,7 +254,7 @@ void loop(){
   section3->action(CURRTIME);
 
 
-  if(CURRTIME % 3600){ //every hour save time
+  if(CURRTIME % 3600){ //every hour save time, other enetities saved on update
     int EEcursor = EEPROM_RTC_OFFSET;
     for(byte i=0; i < sizeof(rtc);i++){
         EEPROM.update(EEcursor++,*(((char*)(&rtc))+i));
