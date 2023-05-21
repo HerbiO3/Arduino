@@ -9,8 +9,7 @@ Pump::Pump(byte id, byte pin, const char* name)  : Entity(id,name) {
 }
 
 JsonObject Pump::toJson(JsonDocument &doc) {
-  JsonObject json = 
-  Entity::toJson(doc);
+  JsonObject json = Entity::toJson(doc);
   json["value"] = this->running;
   return json;
 }

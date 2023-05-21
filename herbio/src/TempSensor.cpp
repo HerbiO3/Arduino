@@ -20,11 +20,6 @@ JsonObject TempSensor::toJson(JsonDocument &doc) {
   return json;
 }
 
-
-Measurable* TempSensor::getMeasurable() {
-  return this;
-}
-
 byte TempSensor::dump(byte* buffer){
   memcpy(buffer, this, sizeof(TempSensor));
   return sizeof(TempSensor);

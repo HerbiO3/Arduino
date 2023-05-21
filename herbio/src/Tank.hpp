@@ -2,9 +2,8 @@
 #define TANK_H
 
 #include "Entity.hpp"
-#include "Measurable.hpp"
 
-class Tank : public Entity, public Measurable {
+class Tank : public Entity {
 
     byte echoPin; 
     byte trigPin; 
@@ -16,7 +15,6 @@ public:
     float measure();
     JsonObject toJson(JsonDocument &doc);
     boolean update(JsonObject &obj);
-    Measurable* getMeasurable();
     byte dump(byte* buffer);
     void load(byte* buffer);
     byte size();

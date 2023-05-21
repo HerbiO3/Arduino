@@ -21,9 +21,6 @@ float MoistureSensor::measure() {
   return value = max(value, 0);
 }
 
-Measurable* MoistureSensor::getMeasurable() {
-  return this;
-}
 byte MoistureSensor::dump(byte* buffer){
   memcpy(buffer, this, sizeof(MoistureSensor));
   return sizeof(MoistureSensor);

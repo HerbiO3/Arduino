@@ -19,7 +19,6 @@
 
 //======Custom objects=============//
 #include "src/Entity.hpp"          //
-#include "src/Measurable.hpp"      //
 #include "src/MoistSensor.hpp"     //
 #include "src/Pump.hpp"            //
 #include "src/Section.hpp"         //
@@ -280,9 +279,6 @@ void command_get_names(){ // total: 559;  po2: 768  (closest power of 2)
 }
 
 void _print_entity(Entity *e){
-  Measurable *m = e->getMeasurable();
-  if(m != nullptr)
-    m->measure();
   doc.clear();
   e->toJson(doc);
   serializeJson(doc,Serial);

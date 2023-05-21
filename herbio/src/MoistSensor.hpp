@@ -2,11 +2,10 @@
 #define MOISTSENSOR_H
 
 #include "Entity.hpp"
-#include "Measurable.hpp"
 #include <ArduinoJson.h>
 #include <Arduino.h>
 
-class MoistureSensor : public Entity, public Measurable {
+class MoistureSensor : public Entity {
   private:
     byte pin;
     int value;
@@ -16,7 +15,6 @@ class MoistureSensor : public Entity, public Measurable {
     MoistureSensor(byte id, byte pin, const char* name);
     JsonObject toJson(JsonDocument &doc) ;
     float measure();
-    Measurable* getMeasurable();
     byte dump(byte* buffer);
     void load(byte* buffer);
     byte size();

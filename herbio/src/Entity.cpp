@@ -20,10 +20,7 @@ Entity* getEntity(Entity** entities, byte id){
   }
   return nullptr;
 }
-void Entity::eToJson(JsonObject &json){
-    json["id"] = this->id;
-    json["name"] = this->name;
-}
+
 JsonObject Entity::toJson(JsonDocument& doc){
     JsonObject json = doc.createNestedObject();
     json["id"] = this->id;

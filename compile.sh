@@ -8,6 +8,7 @@ chmod 0777 "$arduino_cli"
 SKETCH_DIR="$workspace/herbio"
 library_file="$SKETCH_DIR/library.json"  # Replace with the actual path of library.json
 modified_file="$HOME/.arduino_libs_modified"
+modified_src_file="$HOME/.arduino_src_modified"
 
 # Function to install dependencies and save modification date
 install_deps() {
@@ -45,14 +46,13 @@ fi
 
 
 ######################   COMPILING       ###################
- # Compile the sketch
- $arduino_cli compile --build-path $SKETCH_DIR/build --fqbn arduino:avr:leonardo $SKETCH_DIR
-
- # Check for compilation errors
- if [ $? -ne 0 ]; then
-     echo "Compilation failed"
-     exit 1
- fi
+# Compile the sketch
+$arduino_cli compile --build-path $SKETCH_DIR/build --fqbn arduino:avr:leonardo $SKETCH_DIR
+# Check for compilation errors
+if [ $? -ne 0 ]; then
+    echo "Compilation failed"
+    exit 1
+fi
 ######################   ULPOADING       ###################
- # Upload the sketch to the Arduino on /dev/ttyACM0
- $arduino_cli upload -p /dev/ttyACM0 --fqbn arduino:avr:leonardo --input-dir $SKETCH_DIR/build -t
+# Upload the sketch to the Arduino on /dev/ttyACM0
+$arduino_cli upload -p /dev/ttyACM0 --fqbn arduino:avr:leonardo --input-dir $SKETCH_DIR/build -t

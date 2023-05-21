@@ -47,10 +47,6 @@ boolean Tank::update(JsonObject &obj) {
   return true;
 }
 
-Measurable* Tank::getMeasurable() {
-  return this;
-}
-
 
 byte Tank::dump(byte* buffer){
   memcpy(buffer, this, sizeof(Tank));

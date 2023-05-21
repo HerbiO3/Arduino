@@ -14,9 +14,6 @@ JsonObject UVsensor::toJson(JsonDocument &doc) {
   return json;
 }
 
-Measurable* UVsensor::getMeasurable() {
-  return this;
-}
 
 byte UVsensor::dump(byte* buffer){
   memcpy(buffer, this, sizeof(UVsensor));

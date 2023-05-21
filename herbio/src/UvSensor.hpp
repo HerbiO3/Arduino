@@ -3,9 +3,8 @@
 
 #include <ArduinoJson.h>
 #include "Entity.hpp"
-#include "Measurable.hpp"
 
-class UVsensor : public Entity, public Measurable {
+class UVsensor : public Entity {
   private:
     byte pin;
   
@@ -14,8 +13,6 @@ class UVsensor : public Entity, public Measurable {
     UVsensor(byte id, byte pin, const char* name);
     float measure();
     JsonObject toJson(JsonDocument &doc);
-    //boolean update(JsonObject &obj);
-    Measurable* getMeasurable();
     byte dump(byte* buffer);
     void load(byte* buffer);
     byte size();
