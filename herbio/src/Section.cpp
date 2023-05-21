@@ -66,9 +66,8 @@ boolean Section::update(JsonObject &obj){
   }
   return true;
 }
+
 void Section::water(time_t curr_time){
-  Serial.print("---opening ");
-  Serial.println(valve->name);
   this->water_until = curr_time + water_time;
   this->valve->open();
   this->_watering = true;
@@ -76,8 +75,6 @@ void Section::water(time_t curr_time){
 void Section::checkAndStopWater(time_t curr_time){
   if(!_watering) return; //not started or, valve was not opened
   if(curr_time > water_until){
-    Serial.print("---closing ");
-    Serial.println(valve->name);
     valve->close();
     _watering = false;
   }

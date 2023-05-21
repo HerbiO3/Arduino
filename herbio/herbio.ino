@@ -315,11 +315,6 @@ byte execComand(char* cmd){
     }
     cmd++;
   }
-  for(byte i=0;i<nWords;i++){
-    Serial.print("'");
-    Serial.print(words[i]);
-    Serial.println("'");
-  }
 
   if(!strcmp(words[0],"exit")){
     return CMD_exit;
