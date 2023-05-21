@@ -300,13 +300,16 @@ byte atob(const char* str) {
 }
 //puts after every word \0 and do command
 byte execComand(char* cmd){
+  byte len = strlen(cmd);
+  for(byte i=0; i < len; i++)
+    if(cmd[i]=='\n' || cmd[i]=='\r')
+      cmd[i] = '\0';
   //Name begins after last controll keyword
 
   // "TOKENIZE STRING" 
   // strings points to first letter of word
   char *words[No_WORDS];
   byte nWords = 1;
-  byte len = strlen(cmd);
   words[0] = cmd;
   
   while(*cmd){
