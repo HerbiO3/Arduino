@@ -7,7 +7,7 @@
 
 
 // ifdefs debug options
-//#define DEBUG
+// #define DEBUG
 //#define DEBUG_WATCHDOG
 //#define DEBUG_EEPROM
 
@@ -94,10 +94,10 @@ void initObjs(){
   all_ents[i++] = valve1     = new Valve(11,8, "valve1",pump);
   all_ents[i++] = valve2     = new Valve(12,9, "valve2",pump);
   all_ents[i++] = valve3     = new Valve(13,10,"valve3",pump);
-  all_ents[i++] = section0   = new Section(20, "section0",20,90,valve0->id, moist0->id);
-  all_ents[i++] = section1   = new Section(21, "section1",20,90,valve1->id, moist1->id);
-  all_ents[i++] = section2   = new Section(22, "section2",20,90,valve2->id, moist2->id);
-  all_ents[i++] = section3   = new Section(23, "section3",20,90,valve3->id, moist3->id);
+  all_ents[i++] = section0   = new Section(20, "section0",20,90,all_ents,valve0->id, moist0->id);
+  all_ents[i++] = section1   = new Section(21, "section1",20,90,all_ents,valve1->id, moist1->id);
+  all_ents[i++] = section2   = new Section(22, "section2",20,90,all_ents,valve2->id, moist2->id);
+  all_ents[i++] = section3   = new Section(23, "section3",20,90,all_ents,valve3->id, moist3->id);
   #ifdef DEBUG 
     Serial.println("objects initialized");
   #endif
@@ -239,7 +239,9 @@ void setup()
   // declare switch as input
   
 }
+#define UPDATE_TIME()   int EEcursor = EEPROM_RTC_OFFSET;   for(byte i=0; i < sizeof(rtc);i++)     EEPROM.update(EEcursor++,*(((char*)(&rtc))+i))
 #define CURRTIME (rtc.now().secondstime())
+time_t last_save = 0;
 void loop(){
   #ifdef DEBUG
     delay(2000);
@@ -254,15 +256,12 @@ void loop(){
   section2->action(CURRTIME);
   section3->action(CURRTIME);
 
-
-  if(CURRTIME % 3600){ //every hour save time, other enetities saved on update
-    int EEcursor = EEPROM_RTC_OFFSET;
-    for(byte i=0; i < sizeof(rtc);i++){
-        EEPROM.update(EEcursor++,*(((char*)(&rtc))+i));
-    }
+  if(last_save + 3600 < CURRTIME){
+    last_save = CURRTIME;
+    UPDATE_TIME();
   }
-
 }
+
 
 StaticJsonDocument<512> doc;
 void command_get_names(){ // total: 559;  po2: 768  (closest power of 2)
@@ -346,6 +345,7 @@ byte execComand(char* cmd){
   if(!strcmp(words[0],"set")){
     if(!strcmp(words[1],"time")){
       rtc.adjust(DateTime(words[2]));
+      UPDATE_TIME();
       return CMD_set_time;
     }
     if(!strcmp(words[1],"open")){
@@ -365,7 +365,7 @@ byte execComand(char* cmd){
     else if(nWords >=1 && !strcmp(words[1],"empty")){
       eeprom_empty();
       Serial.println("emptied");
-      return true;
+      return CMD_set_empty;
     }else if(nWords>= 2 &&!strcmp(words[1],"num")){
         setNum = atob(words[2]);
         return CMD_set_num;

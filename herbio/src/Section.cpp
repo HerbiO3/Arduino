@@ -6,13 +6,15 @@ extern time_t curr_time;
 Section::Section() {}
 
 
-Section::Section(byte id,const char* name, byte min_humid, time_t water_time, byte valve_id, byte moist_id) : Entity(id,name){
+Section::Section(byte id,const char* name, byte min_humid, time_t water_time, Entity **all_ents, byte valve_id, byte moist_id) : Entity(id,name){
   this->min_humid  = min_humid;
   this->water_time = water_time;
+  this->mode = MANUAL;
   this->water_now = 0;
-
+  this->global_entites = all_ents;
   this->valve     = (Valve*)          getEntity(global_entites,valve_id);
   this->moisture  = (MoistureSensor*) getEntity(global_entites,moist_id);
+
 }
 
 
@@ -26,8 +28,6 @@ JsonObject Section::toJson(JsonDocument& doc) {
   json["water_next"]  = this->water_next ;
   json["min_humidity"]= this->min_humid  ;
   json["water_now"]   = this->water_now;
-  Serial.println("mode: ");
-  Serial.println(this->mode);
   if(this->mode == AUTO ) json["mode"] = "auto"; 
   if(this->mode == TIMED) json["mode"] = "timed"; 
   if(this->mode == MANUAL ) json["mode"] = "manual"; 
@@ -47,12 +47,9 @@ boolean Section::update(JsonObject &obj){
   this->water_start= obj["water_start"] .as<time_t>();
   this->water_next = obj["water_next"]  .as<time_t>();
   this->min_humid  = obj["min_humidity"].as<uint8_t>();
-
   this->valve     = (Valve*)          getEntity(global_entites,obj["valve_id"].as<int8_t>());
   this->moisture  = (MoistureSensor*) getEntity(global_entites,obj["moisture_id"].as<int8_t>());
-
- 
-  const char* new_mode = obj["mode"].as<const char*>();  // MODE EnumType.String
+  const char* new_mode = obj["mode"].as<const char*>(); 
 
   if(! strcmp(new_mode,"auto"  ))
     this->mode = AUTO;
@@ -69,6 +66,7 @@ boolean Section::update(JsonObject &obj){
 
 void Section::water(time_t curr_time){
   this->water_until = curr_time + water_time;
+
   this->valve->open();
   this->_watering = true;
 }
@@ -118,11 +116,7 @@ void Section::action(time_t curr_time){
     checkAndStopWater(curr_time);
   }
 
-  if(mode == MANUAL){  // otazka na tok kodu
-    Serial.print("manual: ");
-    Serial.println(id);
-    Serial.print("water_now: ");
-    Serial.println(water_now);
+  if(mode == MANUAL){ 
     if(water_now){
       water(curr_time);
       water_now = false;

@@ -26,7 +26,7 @@ public:
   Valve* valve;
   MoistureSensor *moisture;
   Section();
-  Section(byte id, const char* name, byte min_humid, time_t water_time, byte valve_id, byte moist_id);
+  Section(byte id, const char* name, byte min_humid, time_t water_time, Entity **all_ents, byte valve_id, byte moist_id);
   JsonObject toJson(JsonDocument &doc);
   boolean update(JsonObject &obj);
 /**
