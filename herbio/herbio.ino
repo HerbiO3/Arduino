@@ -207,7 +207,9 @@ void setup()
 {
   EEPROM.begin();
   Serial.begin(9600);
-  while(!Serial.available());
+  #ifdef DEBUG
+    while(!Serial.available());
+  #endif
   Serial.print("version: ");
   Serial.println(101);
   #ifdef DEBUG
