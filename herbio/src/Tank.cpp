@@ -1,28 +1,49 @@
 #include "Tank.hpp"
+#include <Adafruit_MCP23X17.h>
 
-Tank::Tank(byte id, const char* name, byte echoPin, byte trigPin) : Entity(id,name) {
+/*Tank::Tank(byte id, const char* name, byte echoPin, byte trigPin,Adafruit_MCP23X17 *mcp) : Entity(id,name) {
   this->echoPin = echoPin;
   this->trigPin = trigPin;
   this->dist_full = this->dist_empty = 0;
-}
+  this->mcp = mcp;
 
-Tank::Tank(byte id, const char* name, byte echoPin, byte trigPin, uint16_t dist_full, uint16_t dist_empty) : Tank(id, name, echoPin, trigPin){
+  mcp->pinMode(this->trigPin,OUTPUT);
+  mcp->pinMode(this->echoPin,INPUT);
+}*/
+Tank::Tank(byte id, const char* name, byte echoPin, byte trigPin, uint16_t dist_full, uint16_t dist_empty):Entity(id,name) {
   this->dist_full = dist_full;
   this->dist_empty = dist_empty;
+
+  this->echoPin = echoPin;
+  this->trigPin = trigPin;
+  this->dist_full = this->dist_empty = 0;
+
+  pinMode(this->trigPin,OUTPUT);
+  pinMode(this->echoPin,INPUT);
 }
+
+
 
 float Tank::measure() {
   // send/rec, calc, store value
+  Serial.print("trig: ");
+  Serial.print(trigPin);
+  Serial.print("  echo: ");
+  Serial.println(echoPin);
   digitalWrite(trigPin, LOW);
   delayMicroseconds(2);
   digitalWrite(trigPin, HIGH);
   delayMicroseconds(10);
   digitalWrite(trigPin, LOW);
-  long duration = pulseIn(echoPin, HIGH);
+  long duration = pulseIn(echoPin,HIGH);
+  Serial.print(duration);
+  Serial.print(" dist: ");
+
   uint16_t distance = duration * 0.034f / 2;
   float value = float(distance);
   if(dist_empty != dist_full)
     value =  map(distance, dist_empty, dist_full, 0, 100); // maps distance to a value in percentage
+  Serial.println(value);
 
   return value;
 }

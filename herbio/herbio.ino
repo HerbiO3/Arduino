@@ -4,10 +4,12 @@
 //#include <Wire.h>
 #include "RTClib.h"
 #include <EEPROM.h>
-
+#include <Wire.h>
+#include <Adafruit_MCP23X08.h>
+#include <Adafruit_MCP23X17.h>
 
 // ifdefs debug options
-// #define DEBUG
+ #define DEBUG
 //#define DEBUG_WATCHDOG
 //#define DEBUG_EEPROM
 
@@ -15,7 +17,6 @@
 //#include <Arduino.h>
 //#include <Thread.h>
 //#include <StaticThreadController.h>
-
 
 //======Custom objects=============//
 #include "src/Entity.hpp"          //
@@ -53,7 +54,6 @@
 
 RTC_DS1307 rtc;
 
-
 // TODO:  STATE->MEMORY->INIT, updates 
 
 //======== Entities for the system =============================//
@@ -87,10 +87,10 @@ void initObjs(){
   all_ents[i++] = moist1     = new MoistureSensor(1,A1,"moist_A1");
   all_ents[i++] = moist2     = new MoistureSensor(2,A2,"moist_A2");
   all_ents[i++] = moist3     = new MoistureSensor(3,A3,"moist_A3");
-  all_ents[i++] = tank       = new Tank(5,"tank",3,2); 
+  all_ents[i++] = tank       = new Tank(5,"tank",PIN_A4,PIN7,0,0);
   all_ents[i++] = pump       = new Pump(6,4,"pump");
-  all_ents[i++] = uvSensor   = new UVsensor(7,A4,"uv_7");
-  all_ents[i++] = valve0     = new Valve(10,6,  "valve0",pump);
+  //all_ents[i++] = uvSensor   = new UVsensor(7,A4,"uv_7");
+  all_ents[i++] = valve0     = new Valve(10,6, "valve0",pump);
   all_ents[i++] = valve1     = new Valve(11,8, "valve1",pump);
   all_ents[i++] = valve2     = new Valve(12,9, "valve2",pump);
   all_ents[i++] = valve3     = new Valve(13,10,"valve3",pump);
@@ -205,6 +205,7 @@ void eeprom_empty(){
 byte setNum;
 void setup()
 {
+
   EEPROM.begin();
   Serial.begin(9600);
   #ifdef DEBUG
@@ -348,6 +349,7 @@ byte execComand(char* cmd){
       UPDATE_TIME();
       return CMD_set_time;
     }
+    #ifdef DEBUG
     if(!strcmp(words[1],"open")){
       Valve* v = (Valve*) getEntity(all_ents,atob(words[2]));
       v->open();
@@ -373,7 +375,9 @@ byte execComand(char* cmd){
     else if(nWords>= 2 &&!strcmp(words[1],"dump")){
         dump_EEPROM_entities();
         return CMD_set_dump;
-    } else if(nWords>= 3 &&!strcmp(words[1],"from")){
+    }
+    
+    if(nWords>= 3 &&!strcmp(words[1],"from")){
         if(nWords>= 3 &&!strcmp(words[2],"eeprom")){
           load_entities();
           return CMD_set_from_eeprom;
@@ -387,6 +391,7 @@ byte execComand(char* cmd){
           return CMD_set_from_eeprom;
         }
     }
+    #endif
   }
   return false;
 }

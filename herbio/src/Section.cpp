@@ -43,24 +43,25 @@ boolean Section::update(JsonObject &obj){
   if(! Entity::update(obj))
     return false;
   
-  this->water_time = obj["water_time"]  .as<time_t>();
-  this->water_start= obj["water_start"] .as<time_t>();
-  this->water_next = obj["water_next"]  .as<time_t>();
-  this->min_humid  = obj["min_humidity"].as<uint8_t>();
-  this->valve     = (Valve*)          getEntity(global_entites,obj["valve_id"].as<int8_t>());
-  this->moisture  = (MoistureSensor*) getEntity(global_entites,obj["moisture_id"].as<int8_t>());
-  const char* new_mode = obj["mode"].as<const char*>(); 
+  if (obj.containsKey("water_time"))   this->water_time  = obj["water_time"].as<time_t>();
+  if (obj.containsKey("water_start"))  this->water_start = obj["water_start"].as<time_t>();  
+  if (obj.containsKey("water_next"))   this->water_next  = obj["water_next"].as<time_t>();
+  if (obj.containsKey("min_humidity")) this->min_humid   = obj["min_humidity"].as<uint8_t>();
+  if (obj.containsKey("water_now"))    this->water_now   = obj["water_now"];    
+  
+  if (obj.containsKey("valve_id")) 
+      this->valve = (Valve*)getEntity(global_entites, obj["valve_id"].as<int8_t>());
 
-  if(! strcmp(new_mode,"auto"  ))
-    this->mode = AUTO;
-  if(! strcmp(new_mode,"timed" )) 
-    this->mode = TIMED;
-  if(! strcmp(new_mode,"manual")) 
-    this->mode = MANUAL;
-
-  if(obj.containsKey("water_now")){
-    this->water_now = obj["water_now"];    
+  if (obj.containsKey("moisture_id")) 
+      this->moisture = (MoistureSensor*)getEntity(global_entites, obj["moisture_id"].as<int8_t>());
+  
+  if(obj.containsKey("mode")){
+    const char* new_mode = obj["mode"].as<const char*>(); 
+    if(! strcmp(new_mode,"auto"  )) this->mode = AUTO;
+    if(! strcmp(new_mode,"timed" )) this->mode = TIMED;
+    if(! strcmp(new_mode,"manual")) this->mode = MANUAL;
   }
+
   return true;
 }
 

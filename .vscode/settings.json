@@ -3,6 +3,9 @@
     "files.associations": {
         "cstddef": "cpp",
         "thread": "cpp",
-        "valarray": "cpp"
+        "valarray": "cpp",
+        "functional": "cpp",
+        "iterator": "cpp",
+        "type_traits": "cpp"
     }
 }

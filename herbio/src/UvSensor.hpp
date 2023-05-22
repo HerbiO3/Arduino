@@ -3,11 +3,11 @@
 
 #include <ArduinoJson.h>
 #include "Entity.hpp"
+#include <Adafruit_MCP23X17.h>
 
 class UVsensor : public Entity {
   private:
     byte pin;
-  
   public:
     UVsensor(){};
     UVsensor(byte id, byte pin, const char* name);
